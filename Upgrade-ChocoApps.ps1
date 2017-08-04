@@ -17,7 +17,7 @@ param (
 )
 
 $s = New-PSSession -ComputerName $Computer
-Invoke-Command -ComputerName D001,D002 -ScriptBlock { choco upgrade all -y }
+Invoke-Command -Session $s -ScriptBlock { choco upgrade all -y } -AsJob
 $j = Get-Job
 $results = $j | Receive-Job
 Write-Output $results
