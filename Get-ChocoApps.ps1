@@ -21,7 +21,7 @@ param (
 )
 
 $s = New-PSSession -ComputerName $Computer
-Invoke-Command -ComputerName D001,D002 -ScriptBlock { choco list -lo | %{ @{Computer = $env:COMPUTERNAME; Package = $_.Trim() }} }
+Invoke-Command -Session $s -ScriptBlock { choco list -lo | %{ @{Computer = $env:COMPUTERNAME; Package = $_.Trim() }} } -AsJob
 $j = Get-Job
 $results = $j | Receive-Job
 Write-Output $results
