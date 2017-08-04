@@ -2,8 +2,10 @@
 .DESCRIPTION
   Updates/upgrades all installed chocolatey packages on
   one or more remote computers
+
 .PARAMETER Computer
   [string] (required) Name of computer(s) to administer
+
 .NOTES
 
 .EXAMPLE
