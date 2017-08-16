@@ -15,8 +15,9 @@ putty
 googlechrome
 ;firefox
 ;googledrive
-googleearthpro
-googlephotos
+google-backup-and-sync
+;googleearthpro
+;googlephotos
 azcopy
 microsoftazurestorageexplorer
 teamviewer
