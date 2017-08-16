@@ -14,7 +14,7 @@
     Version: 2017.05.17.01
     Author: David Stein
 .EXAMPLES
-    Choco.ps1 -InputFile "pkglist.txt" -WhatIf -Verbose
+    .\Run-ChocoInstalls.ps1 -InputFile "pkglist.txt" -WhatIf -Verbose
 #>
 
 [CmdletBinding(SupportsShouldProcess=$True)]
