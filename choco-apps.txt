@@ -8,10 +8,12 @@ vscode-powershell
 vscode-csharp
 vscode-icons
 vscode-azurerm-tools
+visualstudio2017community
 7zip
 vlc
 rdcman
 putty
+xmlnotepad
 googlechrome
 ;firefox
 ;googledrive
