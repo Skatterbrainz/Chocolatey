@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<configuration version="1.0.0" comment="chocolatey package configuration control file">
+  <deployments>
+    <deployment device="d004" user="Mike Hunt">notepadpadplusplus,git,7zip,vlc,putty,googlechrome,office365proplus,microsoft-teams,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-azurerm-tools</deployment>
+    <deployment device="d005" user="Mike Rotch">office365proplus,microsoft-teams,7zip,googlechrome</deployment>
+  </deployments>
+  <removals>
+    <removal device="d004" user="Mike Hunt">firefox</removal>
+  </removals>
+</configuration>
