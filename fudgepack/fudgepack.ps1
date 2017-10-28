@@ -2,17 +2,33 @@
 <#
 .SYNOPSIS
 	Run Chocolatey package assignments using XML config file
+
 .PARAMETER ControlFile
+	[optional][string] Path or URI to appcontrol.xml file
+	default: https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/fudgepack/appcontrol.xml
+	
 .PARAMETER LogFile
+	[optional][string] Path to output log file
+	default: $env:TEMP\fudgepack.log
+	
 .PARAMETER TestMode
+	[optional][switch] WhatIf mode - no installs or removals executed
+	
 .NOTES
+	1.0.0 - 10/27/2017 - skatterbrainz
+	
 .EXAMPLE
 	
 	fudgepack.ps1 -Verbose
 
 .EXAMPLE
 
-	fudgepack.ps1 -ControlFile "\\server\share\
+	fudgepack.ps1 -ControlFile "\\server\share\appcontrol.xml"
+
+.EXAMPLE
+	
+	fudgepack.ps1 -TestMode -Verbose
+	
 #>
 param (
     [parameter(Mandatory=$False)]
