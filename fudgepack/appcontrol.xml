@@ -1,4 +1,4 @@
-<?xml version="1.0.2" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration version="1.0.0" comment="chocolatey package configuration control file">
   <deployments>
     <deployment device="d004" user="Mike Hunt" enabled="true" autoupdate="true" when="now">notepadpadplusplus,git,7zip,vlc,putty,googlechrome,office365proplus,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-azurerm-tools</deployment>
