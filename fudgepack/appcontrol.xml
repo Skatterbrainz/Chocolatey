@@ -7,6 +7,7 @@
   </deployments>
   <removals>
     <removal device="d004" user="Mike Hunt" enabled="true" when="now">firefox</removal>
+    <removal device="d005" user="Mike Rotch" enabled="true" when="now">firefox</removal>
     <removal device="nsa18" user="Skatterbrainz" enabled="true" when="10/27/2017 9:45 PM">firefox</removal>
   </removals>
 </configuration>
