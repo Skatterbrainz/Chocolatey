@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration version="1.0.3" comment="chocolatey package configuration control file">
   <deployments>
-    <deployment device="d004" user="Mike Hunt" enabled="true" autoupdate="true" when="now">notepadplusplus,git,7zip,vlc,putty,googlechrome,office365proplus,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-azurerm-tools</deployment>
+    <deployment device="d004" user="Mike Hunt" enabled="true" autoupdate="true" when="now">googlechrome,office365proplus</deployment>
     <deployment device="d005" user="Mike Rotch" enabled="true" autoupdate="false" when="10/27/2017 10:00 PM">office365proplus,7zip,googlechrome</deployment>
     <deployment device="nsa18" user="Skatterbrainz" enabled="true" autoupdate="true" when="10/27/2017 10:00 PM">slack,notepadplusplus,git,7zip,vlc,putty,vlc,rdcman,googlechrome,office365proplus,microsoft-teams,skypeforbusiness,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-mssqdl,vscode-azurerm-tools,microsoftazurestorageexplorer,visualstudio2017community</deployment>
   </deployments>
   <removals>
-    <removal device="d004" user="Mike Hunt" enabled="true" when="now">firefox</removal>
+    <removal device="d004" user="Mike Hunt" enabled="true" when="now">notepadplusplus,git,7zip,vlc,putty,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-azurerm-tools,firefox</removal>
     <removal device="d005" user="Mike Rotch" enabled="true" when="now">firefox</removal>
     <removal device="nsa18" user="Skatterbrainz" enabled="true" when="10/27/2017 9:45 PM">firefox</removal>
   </removals>
