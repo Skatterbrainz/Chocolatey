@@ -3,6 +3,7 @@
   <deployments>
     <deployment device="d004" user="Mike Hunt" enabled="true" autoupdate="true" when="now">notepadpadplusplus,git,7zip,vlc,putty,googlechrome,office365proplus,microsoft-teams,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-azurerm-tools</deployment>
     <deployment device="d005" user="Mike Rotch" enabled="true" autoupdate="false" when="10/27/2017 10:00 PM">office365proplus,microsoft-teams,7zip,googlechrome</deployment>
+    <deployment device="nsa18" user="Skatterbrainz" enabled="true" autoupdate="true" when="now">slack,notepadpadplusplus,git,7zip,vlc,putty,vlc,rdcman,googlechrome,office365proplus,microsoft-teams,skypeforbusiness,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-mssqdl,vscode-azurerm-tools,microsoftazurestorageexplorer,visualstudio2017community</deployment>
   </deployments>
   <removals>
     <removal device="d004" user="Mike Hunt" enabled="true" when="10/27/2017 9:00 PM">firefox</removal>
