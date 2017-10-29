@@ -2,7 +2,7 @@
 #requires -version 3
 <#
 .SYNOPSIS
-	Run Chocolatey package assignments using XML config file
+	Run Chocolatey package assignments and general device config ops using XML config file
 
 .PARAMETER ControlFile
 	[optional][string] Path or URI to appcontrol.xml file
