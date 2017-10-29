@@ -21,6 +21,6 @@
     <reg device="d005" enabled="true" path="HKLM:\software\fudgepack" value="version" data="1.0.3" type="string" />
   </registry>
   <services>
-      <service device="d004" enabled="true" name="RemoteRegistry" startup="auto" action="start" />
+      <service device="d004" enabled="true" name="RemoteRegistry" startup="automatic" action="start" />
   </services>
 </configuration>
