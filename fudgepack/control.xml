@@ -14,14 +14,15 @@
   </deployments>
   <removals>
     <removal device="all" user="all" enabled="false" when="now" params="-yn --all-versions">firefox</removal>
-    <removal device="d004" user="Mike Hunt" enabled="true" when="now" params="-yn --all-versions">vlc</removal>
+    <removal device="d004" user="Mike Hunt" enabled="true" when="now" params="-y -n --all-versions">vscode-powershell,vscode-icons,visualstudiocode</removal>
+    <removal device="d004" user="Mike Hunt" enabled="true" when="now" params="">7zip,7zip.install</removal>
     <removal device="d005" user="Mike Rotch" enabled="false" when="now"></removal>
     <removal device="nsa18" user="Skatterbrainz" enabled="false" when="10/27/2017 9:45 PM"></removal>
   </removals>
   <folders>
     <folder device="all" enabled="true" action="create" path="c:\programdata\fudgepack\test" />
-    <folder device="all" enabled="true" action="empty" path="c:\windows\temp" filter="*.*" />
-    <folder device="d004" enabled="false" action="empty" path="c:\windows\temp" filter="*.log" />
+    <folder device="all" enabled="true" action="empty" path="c:\windows\temp" />
+    <folder device="d004" enabled="false" action="empty" path="c:\windows\temp" filter="*.txt" />
   </folders>
   <files>
     <file device="d004" enabled="false" action="download" source="" target="" />
