@@ -110,19 +110,19 @@ function Invoke-FPChocoInstalls {
 				if ($extparams.length -gt 0) {
 					Write-FudgePackLog -Category "Info" -Message "package: $pkg (params: $extparams)"
 					if (-not $TestMode) {
-						choco install $pkg $extparams
+						choco upgrade $pkg $extparams
 					}
 					else {
-						Write-Verbose "TEST MODE : $pkg"
+						Write-Verbose "TEST MODE : choco upgrade $pkg $extparams"
 					}
 				}
 				else {
 					Write-FudgePackLog -Category "Info" -Message "package: $pkg"
 					if (-not $TestMode) {
-						choco install $pkg -y
+						choco upgrade $pkg -y
 					}
 					else {
-						Write-Verbose "TEST MODE: $pkg"
+						Write-Verbose "TEST MODE: choco upgrade $pkg -y"
 					}
 				}
 			} # foreach
