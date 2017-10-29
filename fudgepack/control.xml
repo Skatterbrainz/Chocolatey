@@ -14,10 +14,13 @@
     <folder device="d004" path="c:\programdata\fudgepack\logs" enabled="true" />
   </folders>
   <files>
-    <file device="d004" enabled="true" source="" target="" />
+    <file device="d004" enabled="false" source="" target="" />
   </files>
   <registry>
     <reg device="d004" enabled="true" path="HKLM:\software\fudgepack" value="version" data="1.0.3" type="string" />
     <reg device="d005" enabled="true" path="HKLM:\software\fudgepack" value="version" data="1.0.3" type="string" />
   </registry>
+  <services>
+      <service device="d004" enabled="true" name="RemoteRegistry" startup="auto" action="start" />
+  </services>
 </configuration>
