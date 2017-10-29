@@ -13,8 +13,8 @@
     <deployment device="nsa18" user="Skatterbrainz" enabled="true" when="10/27/2017 10:00 PM">slack,notepadplusplus,git,vlc,putty,vlc,rdcman,office365proplus,microsoft-teams,skypeforbusiness,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-mssqdl,vscode-azurerm-tools,microsoftazurestorageexplorer,visualstudio2017community</deployment>
   </deployments>
   <removals>
-    <removal device="all" user="all" enabled="false" when="now">firefox</removal>
-    <removal device="d004" user="Mike Hunt" enabled="true" when="now" params="-yn --all-versions">notepadplusplus,git,7zip.install,vlc,putty,jing,teamviewer,vscode-powershell,vscode-icons,vscode-azurerm-tools,VisualStudioCode,firefox</removal>
+    <removal device="all" user="all" enabled="false" when="now" params="-yn --all-versions">firefox</removal>
+    <removal device="d004" user="Mike Hunt" enabled="true" when="now" params="-yn --all-versions">vlc</removal>
     <removal device="d005" user="Mike Rotch" enabled="false" when="now"></removal>
     <removal device="nsa18" user="Skatterbrainz" enabled="false" when="10/27/2017 9:45 PM"></removal>
   </removals>
