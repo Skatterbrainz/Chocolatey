@@ -19,7 +19,7 @@
     <removal device="nsa18" user="Skatterbrainz" enabled="false" when="10/27/2017 9:45 PM"></removal>
   </removals>
   <folders>
-    <folder device="all" enabled="true" action="create" path="c:\programdata\fudgepack\logs" />
+    <folder device="all" enabled="true" action="create" path="c:\programdata\fudgepack\test" />
     <folder device="d004" enabled="false" action="empty" path="c:\windows\temp" filter="*.log" recurse="true" />
     <folder device="all" enabled="true" action="empty" path="c:\windows\temp" filter="*.*" />
   </folders>
