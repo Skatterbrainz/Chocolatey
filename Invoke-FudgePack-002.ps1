@@ -10,7 +10,7 @@
 	
 .PARAMETER LogFile
 	[optional][string] Path to output log file
-	default: $env:TEMP\fudgepack.log
+	default: $env:TEMP\fudgepack.log unless the [control] section of the XML file overrides it (it does)
 	
 .PARAMETER TestMode
 	[optional][switch] WhatIf mode - no installs or removals executed
