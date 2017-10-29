@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration version="1.0.4" comment="windows device configuration control file">
+  <scriptsource url="https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/Invoke-FudgePack-002.ps1" />
   <deployments>
-    <deployment device="d004" user="Mike Hunt" enabled="true" autoupdate="true" when="now">googlechrome,office365proplus</deployment>
-    <deployment device="d005" user="Mike Rotch" enabled="true" autoupdate="false" when="10/27/2017 10:00 PM">office365proplus,7zip,googlechrome</deployment>
-    <deployment device="nsa18" user="Skatterbrainz" enabled="true" autoupdate="true" when="10/27/2017 10:00 PM">slack,notepadplusplus,git,7zip,vlc,putty,vlc,rdcman,googlechrome,office365proplus,microsoft-teams,skypeforbusiness,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-mssqdl,vscode-azurerm-tools,microsoftazurestorageexplorer,visualstudio2017community</deployment>
+    <deployment device="all" user="all" enabled="false" when="now">7zip,googlechrome</deployment>
+    <deployment device="d004" user="Mike Hunt" enabled="true" when="now">office365proplus</deployment>
+    <deployment device="d005" user="Mike Rotch" enabled="true" when="10/27/2017 10:00 PM">office365proplus</deployment>
+    <deployment device="nsa18" user="Skatterbrainz" enabled="true" when="10/27/2017 10:00 PM">slack,notepadplusplus,git,vlc,putty,vlc,rdcman,office365proplus,microsoft-teams,skypeforbusiness,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-mssqdl,vscode-azurerm-tools,microsoftazurestorageexplorer,visualstudio2017community</deployment>
   </deployments>
   <removals>
+    <removal device="all" user="all" enabled="false" when="now">firefox</removal>
     <removal device="d004" user="Mike Hunt" enabled="true" when="now">notepadplusplus,git,7zip.install,vlc,putty,jing,teamviewer,vscode-powershell,vscode-icons,vscode-azurerm-tools,VisualStudioCode,firefox</removal>
-    <removal device="d005" user="Mike Rotch" enabled="true" when="now">firefox</removal>
-    <removal device="nsa18" user="Skatterbrainz" enabled="true" when="10/27/2017 9:45 PM">firefox</removal>
+    <removal device="d005" user="Mike Rotch" enabled="false" when="now"></removal>
+    <removal device="nsa18" user="Skatterbrainz" enabled="false" when="10/27/2017 9:45 PM"></removal>
   </removals>
   <folders>
-    <folder device="d004" enabled="true" action="create" path="c:\programdata\fudgepack\logs" />
-    <folder device="d004" enabled="true" action="empty" path="c:\windows\temp" filter="*.log" recurse="true" />
+    <folder device="all" enabled="true" action="create" path="c:\programdata\fudgepack\logs" />
+    <folder device="d004" enabled="false" action="empty" path="c:\windows\temp" filter="*.log" recurse="true" />
+    <folder device="all" enabled="true" action="empty" path="c:\windows\temp" filter="*.*" />
   </folders>
   <files>
     <file device="d004" enabled="false" source="" target="" />
+    <file device="d005" enabled="false" source="" target="" />
   </files>
   <registry>
-    <reg device="d004" enabled="true" path="HKLM:\software\fudgepack" value="version" data="1.0.3" type="string" />
-    <reg device="d005" enabled="true" path="HKLM:\software\fudgepack" value="version" data="1.0.3" type="string" />
+    <reg device="all" enabled="true" path="HKLM:\software\fudgepack" value="version" data="1.0.5" type="string" />
   </registry>
   <services>
-      <service device="d004" enabled="true" name="RemoteRegistry" startup="automatic" action="start" />
+      <service device="all" enabled="true" name="RemoteRegistry" startup="automatic" action="start" />
   </services>
 </configuration>
