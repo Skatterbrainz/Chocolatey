@@ -5,6 +5,7 @@
     <control enabled="true" type="logpath" value="c:\programdata\fudgepack\fudgepack.log" />
     <control enabled="false" type="logsize" value="5 MB" />
     <control enabled="true" type="logage" value="5 days" />
+    <control enabled="true" type="schedule" value="hourly" />
   </controls>
   <deployments>
     <deployment device="all" user="all" enabled="false" when="now">7zip,googlechrome</deployment>
