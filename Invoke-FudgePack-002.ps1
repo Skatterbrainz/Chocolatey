@@ -22,6 +22,8 @@
 .NOTES
 	1.0.6 - 10/29/2017 - skatterbrainz
 	
+	Instructions: Drop into $env:ProgramData\fudgepack, run as "system" account via scheduled task (hourly, etc.)
+	
 .EXAMPLE
 	
 	Invoke-FudgePack -Verbose
