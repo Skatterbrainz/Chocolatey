@@ -19,8 +19,9 @@
     <folder device="all" enabled="true" action="empty" path="c:\windows\temp" filter="*.*" />
   </folders>
   <files>
-    <file device="d004" enabled="false" source="" target="" />
-    <file device="d005" enabled="false" source="" target="" />
+    <file device="d004" enabled="false" action="download" source="" target="" />
+    <file device="d005" enabled="false" action="rename" source="" target="" />
+    <file device="d005" enabled="false" action="move" source="" target="" />
   </files>
   <registry>
     <reg device="all" enabled="true" path="HKLM:\software\fudgepack" value="version" data="1.0.5" type="string" />
