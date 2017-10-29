@@ -33,5 +33,7 @@
   </registry>
   <services>
       <service device="all" enabled="true" name="RemoteRegistry" startup="automatic" action="start" />
+      <service device="d004" enabled="true" name="PcaSvc" action="restart" />
+      <service device="d005" enabled="true" name="PcaSvc" action="restart" />
   </services>
 </configuration>
