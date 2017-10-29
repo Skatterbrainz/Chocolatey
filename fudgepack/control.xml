@@ -12,7 +12,7 @@
   </removals>
   <folders>
     <folder device="d004" enabled="true" action="create" path="c:\programdata\fudgepack\logs" />
-    <folder device="d004" enabled="true" action="empty" path="c:\windows\temp" filter="*.log" />
+    <folder device="d004" enabled="true" action="empty" path="c:\windows\temp" filter="*.log" recurse="true" />
   </folders>
   <files>
     <file device="d004" enabled="false" source="" target="" />
