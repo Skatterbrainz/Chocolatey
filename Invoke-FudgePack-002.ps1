@@ -6,7 +6,7 @@
 
 .PARAMETER ControlFile
 	[optional][string] Path or URI to appcontrol.xml file
-	default: https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/fudgepack/control.xml
+	default: https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/control.xml
 	
 .PARAMETER LogFile
 	[optional][string] Path to output log file
@@ -20,7 +20,7 @@
 	default is 'All'
 	
 .NOTES
-	1.0.5 - 10/29/2017 - skatterbrainz
+	1.0.6 - 10/29/2017 - skatterbrainz
 	
 .EXAMPLE
 	
