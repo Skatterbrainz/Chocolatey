@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration version="1.0.0" comment="fudgepack - windows device configuration control file">
-  <control enabled="true" exclude="" comment="kill switch" version="1710.11" />
+  <control enabled="true" exclude="" comment="kill switch" version="1710.12" />
   <deployments comment="packages to install or upgrade">
     <deployment device="all" user="all" enabled="true" when="now">7zip,googlechrome</deployment>
     <deployment device="d004" user="Mike Hunt" enabled="true" when="now">bulk-crap-uninstaller,office365proplus</deployment>
@@ -17,7 +17,7 @@
   <folders comment="folders to create or manage">
     <folder device="all" enabled="true" action="create" path="c:\programdata\fudgepack\test" />
     <folder device="all" enabled="true" action="empty" path="c:\windows\temp" />
-    <folder device="d004" enabled="false" action="empty" path="c:\windows\temp" filter="*.txt" />
+    <folder device="d004" enabled="true" action="delete" path="c:\TestFolder" />
   </folders>
   <files comment="files to create or manage">
     <file device="d004" enabled="true" action="rename" source="c:\users\dstein\documents\test1.txt" target="c:\users\dstein\documents\test100.txt" />
