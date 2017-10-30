@@ -33,8 +33,8 @@
       <service device="d005" enabled="true" name="PcaSvc" action="restart" />
   </services>
   <shortcuts comment="shortcuts to create, modify or remove">
-    <shortcut device="all" enabled="true" action="create" name="Internet Explorer" type="lnk" target="c:\program files\internet explorer\iexplore.exe" path="commondesktop" force="true" />
-    <shortcut device="all" enabled="true" action="create" name="Google" type="url" target="http://www.google.com" path="commondesktop" force="true" />
+    <shortcut device="all" enabled="true" action="create" name="Internet Explorer" type="lnk" target="c:\program files\internet explorer\iexplore.exe" path="commondesktop" force="true" description="Internet Explorer" windowstyle="normal" args="" workingpath="" />
+    <shortcut device="all" enabled="true" action="create" name="Google" type="url" target="http://www.google.com" path="commondesktop" force="true" description="Google Search" windowstyle="normal" args="" workingpath="" />
   </shortcuts>
   <opapps comment="on prem application deployments">
     <opapp device="d006" enabled="false" run="\\fs1.contoso.com\apps\packages\7-Zip\7z1701-x64.msi" params="" platforms="win10x64,win7x64" />
