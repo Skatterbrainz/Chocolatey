@@ -231,36 +231,71 @@ function Invoke-FPRegistry {
 			$regdata    = $reg.data
 			$regtype    = $reg.type
 			$deviceName = $reg.device
+			$regAction  = $reg.action
 			Write-FudgePopLog -Category "Info" -Message "assigned to device: $deviceName"
 			Write-FudgePopLog -Category "Info" -Message "keypath: $regpath"
-			Write-FudgePopLog -Category "Info" -Message "value: $regval"
-			Write-FudgePopLog -Category "Info" -Message "data: $regdata"
-			Write-FudgePopLog -Category "Info" -Message "type: $regtype"
-			if (-not(Test-Path $regpath)) {
-				Write-FudgePopLog -Category "Info" -Message "key not found, creating registry key"
-				if (-not $TestMode) {
-					New-Item -Path $regpath -Force | Out-Null
-					Write-FudgePopLog -Category "Info" -Message "updating value assignment to $regdata"
-					New-ItemProperty -Path $regpath -Name $regval -Value $regdata -PropertyType $regtype -Force | Out-Null
-				}
-				else {
-					Write-FudgePopLog -Category "Info" -Message "TEST MODE"
-				}
-			}
-			else {
-				Write-FudgePopLog -Category "Info" -Message "key already exists"
-				if (-not $TestMode) {
-					$cv = Get-ItemProperty -Path $regpath -Name $regval | Select-Object -ExpandProperty $regval
-					Write-FudgePopLog -Category "Info" -Message "current value of $regval is $cv"
-					if ($cv -ne $regdata) {
-						Write-FudgePopLog -Category "Info" -Message "updating value assignment to $regdata"
-						New-ItemProperty -Path $regpath -Name $regval -Value $regdata -PropertyType $regtype -Force | Out-Null
+			Write-FudgePopLog -Category "Info" -Message "action: $regAction"
+			switch ($regAction) {
+				'create' {
+					if ($regdata -eq '$controlversion') { $regdata = $controlversion }
+					if ($regdata -eq '$(Get-Date)') { $regdata = Get-Date }
+					Write-FudgePopLog -Category "Info" -Message "value: $regval"
+					Write-FudgePopLog -Category "Info" -Message "data: $regdata"
+					Write-FudgePopLog -Category "Info" -Message "type: $regtype"
+					if (-not(Test-Path $regpath)) {
+						Write-FudgePopLog -Category "Info" -Message "key not found, creating registry key"
+						if (-not $TestMode) {
+							New-Item -Path $regpath -Force | Out-Null
+							Write-FudgePopLog -Category "Info" -Message "updating value assignment to $regdata"
+							New-ItemProperty -Path $regpath -Name $regval -Value "$regdata" -PropertyType $regtype -Force | Out-Null
+						}
+						else {
+							Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+						}
 					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "key already exists"
+						if (-not $TestMode) {
+							try {
+								$cv = Get-ItemProperty -Path $regpath -Name $regval -ErrorAction SilentlyContinue | Select-Object -ExpandProperty $regval
+							}
+							catch {
+								Write-FudgePopLog -Category "Info" -Message "$regval not found"
+								$cv = ""
+							}
+							Write-FudgePopLog -Category "Info" -Message "current value of $regval is $cv"
+							if ($cv -ne $regdata) {
+								Write-FudgePopLog -Category "Info" -Message "updating value assignment to $regdata"
+								New-ItemProperty -Path $regpath -Name $regval -Value "$regdata" -PropertyType $regtype -Force | Out-Null
+							}
+						}
+						else {
+							Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+						}
+					}
+					break
 				}
-				else {
-					Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+				'delete' {
+					if (Test-Path $regPath) {
+						if (-not $TestMode) {
+							try {
+								Remove-Item -Path $regPath -Recurse -Force | Out-Null
+								Write-FudgePopLog -Category "Info" -Message "registry key deleted"
+							}
+							catch {
+								Write-FudgePopLog -Category "Error" -Message $_.Exception.Message
+							}
+						}
+						else {
+							Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+						}
+					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "registry key not found: $regPath"
+					}
+					break
 				}
-			}
+			} # switch
 		} # foreach
 	}
 	else {
@@ -399,6 +434,26 @@ function Invoke-FPFolders {
 				}
 				break
 			}
+			'delete' {
+				if (Test-Path $folderPath) {
+					Write-FudgePopLog -Category "Info" -Message "deleting $folderPath and subfolders"
+					if (-not $TestMode) {
+						try {
+							Remove-Item -Path $folderPath -Recurse -Force | Out-Null
+							Write-FudgePopLog -Category "Info" -Message "folder may remain if files are still in use"
+						}
+						catch {
+							Write-FudgePopLog -Category "Error" -Message $_.Exception.Message
+						}
+					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+					}
+				}
+				else {
+				}
+				break
+			}
 		} # switch
 	} # foreach
 }
@@ -464,23 +519,33 @@ function Invoke-FPFiles {
 				}
 				'rename' {
 					Write-FudgePopLog -Category "Info" -Message "renaming file"
-					Rename-Item -Path $fileSource -NewName $fileTarget -Force | Out-Null
-					if (Test-Path $fileTarget) {
-						Write-FudgePopLog -Category "Info" -Message "file renamed successfully"
+					if (Test-Path $fileSource) {
+						Rename-Item -Path $fileSource -NewName $fileTarget -Force | Out-Null
+						if (Test-Path $fileTarget) {
+							Write-FudgePopLog -Category "Info" -Message "file renamed successfully"
+						}
+						else {
+							Write-FudgePopLog -Category "Error" -Message "failed to rename file!"
+						}
 					}
 					else {
-						Write-FudgePopLog -Category "Error" -Message "failed to rename file!"
+						Write-FudgePopLog -Category "Warning" -Message "source file not found: $fileSource"
 					}
 					break
 				}
 				'move' {
 					Write-FudgePopLog -Category "Info" -Message "moving file"
-					Move-Item -Path $fileSource -Destination $fileTarget -Force | Out-Null
-					if (Test-Path $fileTarget) {
-						Write-FudgePopLog -Category "Info" -Message "file moved successfully"
+					if (Test-Path $fileSource) {
+						Move-Item -Path $fileSource -Destination $fileTarget -Force | Out-Null
+						if (Test-Path $fileTarget) {
+							Write-FudgePopLog -Category "Info" -Message "file moved successfully"
+						}
+						else {
+							Write-FudgePopLog -Category "Error" -Message "failed to move file!"
+						}
 					}
 					else {
-						Write-FudgePopLog -Category "Error" -Message "failed to move file!"
+						Write-FudgePopLog -Category "Warning" -Message "source file not found: $fileSource"
 					}
 					break
 				}
@@ -499,6 +564,9 @@ function Invoke-FPFiles {
 						catch {
 							Write-FudgePopLog -Category "Error" -Message $_.Exception.Message
 						}
+					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "source file not found: $fileSource"
 					}
 					break
 				}
@@ -598,6 +666,28 @@ function Invoke-FPShortcuts {
 					break
 				}
 				'delete' {
+					Write-FudgePopLog -Category "Info" -Message "shortcut name....: $scName"
+					Write-FudgePopLog -Category "Info" -Message "shortcut path....: $scPath"
+					Write-FudgePopLog -Category "Info" -Message "device name......: $scDevice"
+					$scFullName = "$scRealPath\$scName.$scType"
+					Write-FudgePopLog -Category "Info" -Message "full linkpath: $scFullName"
+					if (Test-Path $scFullName) {
+						Write-FudgePopLog -Category "Info" -Message "creating new shortcut"
+						try {
+							if (-not $TestMode) {
+								Remove-Item -Path $scFullName -Force | Out-Null
+							}
+							else {
+								Write-FudgePopLog -Category "Info" -Message "TEST MODE: $scFullName"
+							}
+						}
+						catch {
+							Write-FudgePopLog -Category "Error" -Message $_.Exception.Message
+						}
+					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "shortcut not found: $scFullName"
+					}
 					break
 				}
 			} # switch
