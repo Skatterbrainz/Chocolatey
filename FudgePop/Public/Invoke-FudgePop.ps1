@@ -69,3 +69,4 @@ function Invoke-FudgePop {
 	Write-FudgePopLog -Category "Info" -Message "---- processing cycle finished ----"
 	if ($error.Count -eq 0) { Write-Output 0 } else { Write-Output -1 }
 }
+Export-ModuleMember -Function Invoke-FudgePop
