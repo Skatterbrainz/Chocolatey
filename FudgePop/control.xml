@@ -41,6 +41,7 @@
     <shortcut device="d004" enabled="true" action="delete" name="Google 2" type="url" path="commondesktop" force="true" />
   </shortcuts>
   <opapps comment="on prem application deployments">
-    <opapp device="d006" enabled="false" name="7-zip 1701 x64" run="\\fs1.contoso.com\apps\packages\7-Zip\7z1701-x64.msi" params="" platforms="win10x64,win7x64" />
+    <opapp device="d004" enabled="true" name="Paint.Net 4.0.17 x64" action="install" run="\\fs1.contoso.com\apps\packages\Paint.Net\PaintDotNet_x64.msi" params="" platforms="win10x64,win7x64" restart="false" />
+    <opapp device="d004" enabled="true" name="Remote Desktop Connection Manager" action="uninstall" run="msiexec /x {0240359E-6A4C-4884-9E94-B397A02D893C} /q" restart="false" />
   </opapps>
 </configuration>
