@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<configuration version="0.8.8" comment="fudgepack - windows device configuration control file">
-  <scriptsource url="https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/Invoke-FudgePack-002.ps1" />
+<configuration version="1.0.0" comment="fudgepack - windows device configuration control file">
+  <control enabled="true" />
   <deployments>
     <deployment device="all" user="all" enabled="true" when="now">7zip,googlechrome</deployment>
-    <deployment device="d004" user="Mike Hunt" enabled="true" when="now">office365proplus</deployment>
+    <deployment device="d004" user="Mike Hunt" enabled="true" when="now">bulk-crap-uninstaller,office365proplus</deployment>
     <deployment device="d005" user="Mike Rotch" enabled="true" when="10/27/2017 10:00 PM">office365proplus</deployment>
     <deployment device="d006" user="Dick Head" enabled="true" when="now">bulk-crap-uninstaller,visualstudiocode,vscode-powershell</deployment>
     <deployment device="nsa18" user="Skatterbrainz" enabled="true" when="10/27/2017 10:00 PM">slack,notepadplusplus,git,vlc,putty,vlc,rdcman,office365proplus,microsoft-teams,skypeforbusiness,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-mssqdl,vscode-azurerm-tools,microsoftazurestorageexplorer,visualstudio2017community</deployment>
