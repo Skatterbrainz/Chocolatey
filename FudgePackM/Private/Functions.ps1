@@ -1,10 +1,21 @@
 <#
 .SYNOPSIS
-	Private functions for running FudgePack	
+	Private functions for running FudgePack
+.NOTES
+	0.8.8 - 10/29/2017 - David Stein
 #>
 
 $FPRegPath  = "HKLM:\SOFTWARE\FudgePack"
-$FPFilePath = "$($env:PROGRAMDATA)\FudgePack"
+$FPLogFile  = "$($env:TEMP)\fudgepack.log"
+
+<#
+.SYNOPSIS
+	Yet another custom log writing function, like all the others
+.PARAMETER Category
+	[string] [required] One of 'Info', 'Warning', or 'Error'
+.PARAMETER Message
+	[string] [required] Message text to enter into log file
+#>
 
 function Write-FudgePackLog {
 	param (
@@ -17,8 +28,13 @@ function Write-FudgePackLog {
 	)
 	Write-Verbose "$(Get-Date -f 'yyyy-M-dd HH:mm:ss')  $Category  $Message"
 	"$(Get-Date -f 'yyyy-M-dd HH:mm:ss')  $Category  $Message" | 
-		Out-File $LogFile -Append -NoClobber -Encoding Default
+		Out-File -FilePath $FPLogFile -Append -NoClobber -Encoding Default
 }
+
+<#
+.SYNOPSIS
+	Makes sure Chocolatey is installed and kept up to date
+#>
 
 function Assert-Chocolatey {
 	param ()
@@ -39,6 +55,13 @@ function Assert-Chocolatey {
 	}
 }
 
+<#
+.SYNOPSIS
+	Imports the XML data from the XML control file
+.PARAMETER FilePath
+	Path or URI to the control XML file
+#>
+
 function Get-FPControlData {
 	param (
 		[parameter(Mandatory=$True, HelpMessage="Path or URI to XML control file")]
@@ -49,10 +72,6 @@ function Get-FPControlData {
 	if ($FilePath.StartsWith("http")) {
 		try {
 			[xml]$result = Invoke-RestMethod -Uri $FilePath -UseBasicParsing
-			$logpath = $result.configuration.controls.control | 
-				Where-Object {$_.enabled -eq 'true' -and $_.type -eq 'logpath'} |
-					Select-Object -ExpandProperty 'value'
-			if ($logpath -eq "") { $LogFile = $logpath }
 		}
 		catch {
 			Write-FudgePackLog -Category "Error" -Message "failed to import data from Uri: $FilePath"
@@ -80,7 +99,15 @@ function Get-FPControlData {
 	Write-Output $result
 }
 
+<#
+.SYNOPSIS
+	Execute CHOCOLATEY INSTALLATION AND UPGRADE directives from XML control file
+.PARAMETER DataSet
+	XML data set fed from the XML control file
+#>
+
 function Invoke-FPChocoInstalls {
+	[CmdletBinding()]
 	param (
 		[parameter(Mandatory=$True)]
 		$DataSet
@@ -127,7 +154,15 @@ function Invoke-FPChocoInstalls {
 	}
 }
 
+<#
+.SYNOPSIS
+	Execute CHOCOLATEY REMOVALS directives from XML control file
+.PARAMETER DataSet
+	XML data set fed from the XML control file
+#>
+
 function Invoke-FPChocoRemovals {
+	[CmdletBinding()]
 	param (
 		[parameter(Mandatory=$True)]
 		$DataSet
@@ -173,7 +208,15 @@ function Invoke-FPChocoRemovals {
 	}
 }
 
+<#
+.SYNOPSIS
+	Execute REGISTRY directives from XML control file
+.PARAMETER DataSet
+	XML data set fed from the XML control file
+#>
+
 function Invoke-FPRegistry {
+	[CmdletBinding()]
 	param (
 		[parameter(Mandatory=$True)]
 		$DataSet
@@ -215,7 +258,15 @@ function Invoke-FPRegistry {
 	}
 }
 
+<#
+.SYNOPSIS
+	Execute SERVICES directives from XML control file
+.PARAMETER DataSet
+	XML data set fed from the XML control file
+#>
+
 function Invoke-FPServices {
+	[CmdletBinding()]
 	param (
 		[parameter(Mandatory=$True)]
 		$DataSet
@@ -267,7 +318,15 @@ function Invoke-FPServices {
 	} # foreach
 }
 
+<#
+.SYNOPSIS
+	Execute FOLDERS directives from XML control file
+.PARAMETER DataSet
+	XML data set fed from the XML control file
+#>
+
 function Invoke-FPFolders {
+	[CmdletBinding()]
 	param (
 		[parameter(Mandatory=$True)]
 		$DataSet
@@ -304,7 +363,15 @@ function Invoke-FPFolders {
 	} # foreach
 }
 
+<#
+.SYNOPSIS
+	Execute FILES directives from XML control file
+.PARAMETER DataSet
+	XML data set fed from the XML control file
+#>
+
 function Invoke-FPFiles {
+	[CmdletBinding()]
 	param (
 		[parameter(Mandatory=$True)]
 		$DataSet
@@ -333,6 +400,13 @@ function Invoke-FPFiles {
 		} # switch
 	} # foreach
 }
+
+<#
+.SYNOPSIS
+	Actually initiates all the crap being shoved in its face from the XML file
+.PARAMETER DataSet
+	XML data set fed from the XML control file
+#>
 
 function Invoke-FPTasks {
 	param (
@@ -367,16 +441,37 @@ function Invoke-FPTasks {
 	}
 }
 
+<#
+.SYNOPSIS
+	Create or Update Scheduled Task for FudgePack client script
+.PARAMETER IntervalHours
+	[int][optional] Hourly interval from 1 to 12
+#>
+
 function Set-FPConfiguration {
-	param ()
+	[CmdletBinding()]
+	param (
+		[parameter(Mandatory=$False, HelpMessage="Recurrence Interval in hours")]
+		[ValidateNotNullOrEmpty()]
+		[ValidateRange(1,12)]
+		[int] $IntervalHours = 1
+	)
 	Write-Host "Configuring FudgePack scheduled task"
+	$taskname = "Run FudgePack"
 	Write-FudgePackLog -Category "Info" -Message "updating fudgepack client configuration"
-	$filePath = "$($env:PROGRAMDATA)\FudgePack\Invoke-FudgePack.ps1"
+	#$filePath = "$($env:PROGRAMFILES)\WindowsPowerShell\Modules\FudgePack\Invoke-FudgePack.ps1"
+	$filepath = "C:\Users\Dave\Downloads\FudgePack\Public\Invoke-FudgePack.ps1"
 	if (Test-Path $filepath) {
-		$action = "powershell.exe -ExecutionPolicy ByPass -File $filepath"
-		SCHTASKS /Create /RU "SYSTEM" /SC hourly /MO 1 /TN "Run FudgePack" /TR $action
-		if (Get-ScheduledTask -TaskName "Run FudgePack" -ErrorAction SilentlyContinue) {
+		$action = 'powershell.exe -ExecutionPolicy ByPass -NoProfile'
+		$action += ' -File '+$filepath
+		Write-Verbose "creating: SCHTASKS /Create /RU `"SYSTEM`" /SC hourly /MO $IntervalHours /TN `"$taskname`" /TR `"$action`""
+		SCHTASKS /Create /RU "SYSTEM" /SC hourly /MO $IntervalHours /TN "$taskname" /TR "$action"
+		if (Get-ScheduledTask -TaskName $taskname -ErrorAction SilentlyContinue) {
+			Write-FudgePackLog -Category "Info" -Message "task has been created successfully."
 			Write-Output $True
+		}
+		else {
+			Write-FudgePackLog -Category "Error" -Message "well, that sucked. no new scheduled task for you."
 		}
 	}
 }
