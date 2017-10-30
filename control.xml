@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration version="1.0.0" comment="fudgepack - windows device configuration control file">
-  <control enabled="true" />
-  <deployments>
+  <control enabled="true" comment="kill switch" />
+  <deployments comment="packages to install or upgrade">
     <deployment device="all" user="all" enabled="true" when="now">7zip,googlechrome</deployment>
     <deployment device="d004" user="Mike Hunt" enabled="true" when="now">bulk-crap-uninstaller,office365proplus</deployment>
     <deployment device="d005" user="Mike Rotch" enabled="true" when="10/27/2017 10:00 PM">office365proplus</deployment>
     <deployment device="d006" user="Dick Head" enabled="true" when="now">bulk-crap-uninstaller,visualstudiocode,vscode-powershell</deployment>
     <deployment device="nsa18" user="Skatterbrainz" enabled="true" when="10/27/2017 10:00 PM">slack,notepadplusplus,git,vlc,putty,vlc,rdcman,office365proplus,microsoft-teams,skypeforbusiness,jing,teamviewer,visualstudiocode,vscode-powershell,vscode-icons,vscode-mssqdl,vscode-azurerm-tools,microsoftazurestorageexplorer,visualstudio2017community</deployment>
   </deployments>
-  <removals>
+  <removals comment="packages to remove">
     <removal device="all" user="all" enabled="false" when="now">firefox</removal>
     <removal device="d004" user="Mike Hunt" enabled="true" when="now">slack,vscode-powershell,vscode-icons,visualstudiocode</removal>
     <removal device="d005" user="Mike Rotch" enabled="false" when="now">7zip</removal>
     <removal device="nsa18" user="Skatterbrainz" enabled="false" when="10/27/2017 9:45 PM"></removal>
   </removals>
-  <folders>
+  <folders comment="folders to create or manage">
     <folder device="all" enabled="true" action="create" path="c:\programdata\fudgepack\test" />
     <folder device="all" enabled="true" action="empty" path="c:\windows\temp" />
     <folder device="d004" enabled="false" action="empty" path="c:\windows\temp" filter="*.txt" />
   </folders>
-  <files>
+  <files comment="files to create or manage">
     <file device="d004" enabled="false" action="download" source="" target="" />
     <file device="d005" enabled="false" action="rename" source="" target="" />
     <file device="d005" enabled="false" action="move" source="" target="" />
   </files>
-  <registry>
+  <registry comment="registry keys and values to create or manage">
     <reg device="all" enabled="true" path="HKLM:\software\fudgepack" value="version" data="1.0.5" type="string" />
   </registry>
-  <services>
+  <services comment="services to configure or manage">
       <service device="all" enabled="true" name="RemoteRegistry" startup="automatic" action="start" />
       <service device="d004" enabled="true" name="PcaSvc" action="restart" />
       <service device="d005" enabled="true" name="PcaSvc" action="restart" />
   </services>
+  <shortcuts comment="shortcuts to create, modify or remove">
+    <shortcut device="all" enabled="true" name="Internet Explorer" target="c:\program files\internet explorer\iexplore.exe" path="commondesktop" />
+  </shortcuts>
+  <opapps comment="on prem application deployments">
+    <opapp device="d006" enabled="false" run="\\fs1.contoso.com\apps\packages\7-Zip\7z1701-x64.msi" params="" platforms="win10x64,win7x64" />
+  </opapps>
 </configuration>
