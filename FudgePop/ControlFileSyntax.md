@@ -4,6 +4,7 @@
 
 The control XML format includes a set of basic sections which focus on specific areas of Windows device management:
 
+* Control (global settings)
 * Deployments (Install/Update Chocolatey packages)
 * Removals (Uninstall Chocolatey packages)
 * Files
@@ -23,7 +24,9 @@ The default location of the control is on this Github repo.  The file can be cop
 
 * Description: provides global settings for all devices and all operations included with FudgePop
 * Required:
-  * enabled="true" or "false" ("false" disables FudgePop)
+  * enabled = "true" or "false" ("false" = kill switch / disables FudgePop)
+* Optional:
+  * exclude = "name" (name of computers to disable FudgePop operations)
 
 **Installs**
 
