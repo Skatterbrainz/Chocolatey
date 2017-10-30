@@ -2,6 +2,13 @@
 
 Centrally manage Windows 10 computers using a local script which reads instructions from a remote XML control file.
 
+* Install, Upgrade and Remove Chocolatey Packages
+* Create, Delete and Empty Folders
+* Copy, Rename, Move or Delete Files
+* Start, Stop and Reconfigure Services
+* Add, Modify Registry Keys and Values
+* Coming Soon: Deploy on-prem software
+
 ## Invoke-FudgePop
 
 * **ControlFile** _path-or-uri_
