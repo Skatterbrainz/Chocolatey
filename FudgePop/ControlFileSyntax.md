@@ -16,9 +16,9 @@ The default location of the control is on this Github repo.  The file can be cop
 
 (boy, that sounds impressive)
 
-**Ccontrol**
+**Control**
 
-* provides global settings for all devices and all operations included with FudgePop
+* Description: provides global settings for all devices and all operations included with FudgePop
 * Required:
   * enabled="true" or "false" ("false" disables FudgePop)
 
