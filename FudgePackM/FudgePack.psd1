@@ -12,7 +12,7 @@
 RootModule = '.\FudgePack.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.8.7'
+ModuleVersion = '0.8.8'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -70,7 +70,8 @@ Description = 'Run Chocolatey package assignments using XML config file'
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @(
-	'Invoke-FudgePack'
+	'Invoke-FudgePack',
+	'Configure-FudgePack'
 )
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
