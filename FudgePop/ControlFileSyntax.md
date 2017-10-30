@@ -18,7 +18,7 @@ The default location of the control is on this Github repo.  The file can be cop
 
 ## Important!
 
-Always remember that FudgePop is designed to run as a scheduled task, which executes under the context of the local SYSTEM account.  This is important to consider when planning for tasks such as managing registry keys, files and shortcuts.
+Always remember that FudgePop is designed to run as a scheduled task, which executes under the context of the local SYSTEM account.  This is important to consider when planning for tasks such as managing registry keys, files and shortcuts.  If On-Prem apps are being used, the source location (UNC share, etc) must allow for anonymous access if the device is not domain-joined.  If the device is domain-joined, the source location should allow the domain security group "Domain Computers" to have read-only access.
 
 ## Syntactical Parameterization Constructs
 
