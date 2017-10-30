@@ -17,6 +17,12 @@ Centrally manage Windows 10 computers using a local script which reads instructi
   3. Configure the scheduled task using the **Set-FudgePopConfiguration** function
   4. Confirm the scheduled task configuration and manually run the task to insure proper operation
 
+# Management
+
+  * Edit the control XML file to provide the configuration data you desire.
+  * Increment the [version] attribute within the [control] element (to insure XML data is read properly on clients)
+  * Allow time for clients to run scheduled task to invoke control data updates (or force task to run)
+  
 # Functions
 
 ## Invoke-FudgePop
