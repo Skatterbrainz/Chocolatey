@@ -1,4 +1,4 @@
-# FudgePack (Module) 0.8.8
+# FudgePacker (Module) 0.8.8
 
 Centrally manage Windows 10 computers using a local script which reads instructions from a remote XML control file.
 
