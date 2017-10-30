@@ -38,19 +38,19 @@ function Invoke-FudgePop {
 	param (
 		[parameter(Mandatory=$False, HelpMessage="Path or URI to XML control file")]
 			[ValidateNotNullOrEmpty()]
-			[string] $ControlFile = 'https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/control.xml',
+			[string] $ControlFile = 'https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/FudgePop/control.xml',
 		[parameter(Mandatory=$False, HelpMessage="Path to output log file")]
 			[ValidateNotNullOrEmpty()]
 			[string] $LogFile = "$($env:TEMP)\fudgepop.log",
 		[parameter(Mandatory=$False, HelpMessage="Run in testing mode")]
 			[switch] $TestMode,
 		[parameter(Mandatory=$False, HelpMessage="Specify configuration task group to invoke from XML control file")]
-			[ValidateSet('All','Installs','Removals','Folders','Files','Registry','Services')]
+			[ValidateSet('All','Installs','Removals','Folders','Files','Registry','Services','Shortcuts','OPApps')]
 			[string] $Payload = 'All',
 		[parameter(Mandatory=$False, HelpMessage="Configure options")]
 			[switch] $Configure
 	)
-	Start-Trancscript
+	Start-Transcript -OutputDirectory $env:TEMP
 	Write-Verbose "script version: 1.0.0"
 	$error.Clear()
 	if ($Configure) {
@@ -60,7 +60,14 @@ function Invoke-FudgePop {
 		Assert-Chocolatey
 		$controlData = Get-FPControlData -FilePath $ControlFile
 		if ($controldata) { 
-			Invoke-FPTasks -DataSet $controlData 
+			$controlversion = $controldata.configuration.control.version
+			Write-FudgePopLog -Category "Info" -Message "control file version: $controlversion"
+			if ($controldata.configuration.control.enabled -ne 'true') {
+				Write-FudgePopLog -Category "Info" -Message "control file is currently DISABLED"
+			}
+			else {
+				Invoke-FPTasks -DataSet $controlData 
+			}
 		}
 		else {
 			Write-FudgePopLog -Category "Error" -Message "no data was returned from xml request"
