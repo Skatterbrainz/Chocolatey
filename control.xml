@@ -33,7 +33,7 @@
       <service device="d005" enabled="true" name="PcaSvc" action="restart" />
   </services>
   <shortcuts comment="shortcuts to create, modify or remove">
-    <shortcut device="all" enabled="true" name="Internet Explorer" type="file" target="c:\program files\internet explorer\iexplore.exe" path="commondesktop" />
+    <shortcut device="all" enabled="true" name="Internet Explorer" type="lnk" target="c:\program files\internet explorer\iexplore.exe" path="commondesktop" />
     <shortcut device="all" enabled="true" name="Google" type="url" target="http://www.google.com" path="commondesktop" />
   </shortcuts>
   <opapps comment="on prem application deployments">
