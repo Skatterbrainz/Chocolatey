@@ -10,6 +10,14 @@ Centrally manage Windows 10 computers using a local script which reads instructi
 * Add, Modify Registry Keys and Values
 * Coming Soon: Deploy on-prem software
 
+# Installation
+
+  1. Use the Install-Module cmdlet to install FudgePop:  Install-Module FudgePop
+  2. Configure the scheduled task using the Set-FudgePopConfiguration function
+  3. Confirm the scheduled task configuration and manually run the task to insure proper operation
+
+# Functions
+
 ## Invoke-FudgePop
 
 * **ControlFile** _path-or-uri_
