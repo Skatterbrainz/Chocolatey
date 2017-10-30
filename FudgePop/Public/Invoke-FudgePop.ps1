@@ -10,7 +10,7 @@
 	
 .PARAMETER LogFile
 	[optional][string] Path to output log file
-	default: $env:TEMP\fudgepack.log unless the [control] section of the XML file overrides it (it does)
+	default: $env:TEMP\fudgepop.log unless the [control] section of the XML file overrides it (it does)
 	
 .PARAMETER TestMode
 	[optional][switch] WhatIf mode - no installs or removals executed
@@ -20,28 +20,28 @@
 	default is 'All'
 	
 .NOTES
-	0.8.8 - 10/29/2017 - David Stein
+	1.0.0 - 10/30/2017 - David Stein
 	
 .EXAMPLE
-	Invoke-FudgePack -Verbose
+	Invoke-FudgePop -Verbose
 
 .EXAMPLE
-	Invoke-FudgePack -ControlFile "\\server\share\appcontrol.xml"
+	Invoke-FudgePop -ControlFile "\\server\share\control.xml"
 
 .EXAMPLE	
-	Invoke-FudgePack -TestMode -Payload 'Registry' -Verbose
+	Invoke-FudgePop -TestMode -Payload 'Registry' -Verbose
 
 .EXAMPLE
-	Invoke-FudgePack -Configure
+	Invoke-FudgePop -Configure
 #>
-function Invoke-FudgePack {
+function Invoke-FudgePop {
 	param (
 		[parameter(Mandatory=$False, HelpMessage="Path or URI to XML control file")]
 			[ValidateNotNullOrEmpty()]
 			[string] $ControlFile = 'https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/control.xml',
 		[parameter(Mandatory=$False, HelpMessage="Path to output log file")]
 			[ValidateNotNullOrEmpty()]
-			[string] $LogFile = "$($env:TEMP)\fudgepack.log",
+			[string] $LogFile = "$($env:TEMP)\fudgepop.log",
 		[parameter(Mandatory=$False, HelpMessage="Run in testing mode")]
 			[switch] $TestMode,
 		[parameter(Mandatory=$False, HelpMessage="Specify configuration task group to invoke from XML control file")]
@@ -51,7 +51,7 @@ function Invoke-FudgePack {
 			[switch] $Configure
 	)
 	Start-Trancscript
-	Write-Verbose "script version: 0.8.8"
+	Write-Verbose "script version: 1.0.0"
 	$error.Clear()
 	if ($Configure) {
 		Set-FPConfiguration
@@ -63,10 +63,9 @@ function Invoke-FudgePack {
 			Invoke-FPTasks -DataSet $controlData 
 		}
 		else {
-			Write-FudgePackLog -Category "Error" -Message "no data was returned from xml request"
+			Write-FudgePopLog -Category "Error" -Message "no data was returned from xml request"
 		}
 	}
-	Write-FudgePackLog -Category "Info" -Message "---- processing cycle finished ----"
-	#Stop-Transcript
+	Write-FudgePopLog -Category "Info" -Message "---- processing cycle finished ----"
 	if ($error.Count -eq 0) { Write-Output 0 } else { Write-Output -1 }
 }
