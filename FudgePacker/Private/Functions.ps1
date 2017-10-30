@@ -1,8 +1,8 @@
 <#
 .SYNOPSIS
-	Private functions for running FudgePack
+	Private functions for running FudgePacker
 .NOTES
-	0.8.8 - 10/29/2017 - David Stein
+	0.8.8 - 10/30/2017 - David Stein
 #>
 
 $FPRegPath  = "HKLM:\SOFTWARE\FudgePack"
