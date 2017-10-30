@@ -5,7 +5,7 @@
 	Prompt for inputs to change scheduled task configuration
 #>
 
-function Configure-FudgePop {
+function Set-FudgePopConfiguration {
 	[CmdletBinding()]
 	param ()
 	try {
@@ -31,15 +31,23 @@ function Configure-FudgePop {
 	else {
 		Write-Warning "Invalid interval value entered. Must be between 1 and 12"
 	}
+	Write-FudgePopLog -Category "Info" -Message "Registry path: $FPRegPath"
 	try {
-		$logsize = Get-ItemProperty -Path "HKLM:\SOFTWARE\FudgePop" -Name "MaxLogSizeMB" -ErrorAction SilentlyContinue | Select -ExpandProperty MaxLogSizeMB
+		if (-not(Test-Path $FPRegPath)) {
+			New-Item -Path $FPRegPath -Force | Out-Null
+			New-ItemProperty -Path $FPRegPath -Name "DateStamp" -PropertyType "String" -Value (Get-Date) -Force | Out-Null
+			New-ItemProperty -Path $FPRegPath -Name "Version" -PropertyType "String" -Value (Get-Module FudgePop).Version -join '.' -Force | Out-Null
+		}
+		$logsize = Get-ItemProperty -Path $FPRegPath -Name "MaxLogSizeMB" -ErrorAction SilentlyContinue | Select -ExpandProperty MaxLogSizeMB
+		if (-not($logsize)) { $logsize = 10 }
 		$xx = (Read-Host -Prompt 'Maximum log file size in MB [$logsize]')
 		if ($xx -eq $null -or $xx -eq '') { $xx = $logsize }
-		Set-ItemProperty -Path "HKLM:\SOFTWARE\FudgePop" -Name "MaxLogSizeMB" -Value $xx
+		Set-ItemProperty -Path $FPRegPath -Name "MaxLogSizeMB" -Value $xx
 	}
 	catch {
 		$xx = (Read-Host -Prompt 'Maximum log file size in MB [10]')
 		if ($xx -eq $null -or $xx -eq '') { $xx = 10 }
-		Set-ItemProperty -Path "HKLM:\SOFTWARE\FudgePop" -Name "MaxLogSizeMB" -Value $xx
+		Set-ItemProperty -Path $FPRegPath -Name "MaxLogSizeMB" -Value $xx
 	}
 }
+Export-ModuleMember -Function Set-FudgePopConfiguration
