@@ -38,8 +38,9 @@ function Set-FudgePopConfiguration {
 			New-ItemProperty -Path $FPRegPath -Name "DateStamp" -PropertyType "String" -Value (Get-Date) -Force | Out-Null
 			New-ItemProperty -Path $FPRegPath -Name "Version" -PropertyType "String" -Value (Get-Module FudgePop).Version -join '.' -Force | Out-Null
 		}
+		$logsize = ""
 		$logsize = Get-ItemProperty -Path $FPRegPath -Name "MaxLogSizeMB" -ErrorAction SilentlyContinue | Select -ExpandProperty MaxLogSizeMB
-		if (-not($logsize)) { $logsize = 10 }
+		if ($logsize.length -eq 0) { $logsize = 10 }
 		$xx = (Read-Host -Prompt 'Maximum log file size in MB [$logsize]')
 		if ($xx -eq $null -or $xx -eq '') { $xx = $logsize }
 		Set-ItemProperty -Path $FPRegPath -Name "MaxLogSizeMB" -Value $xx
