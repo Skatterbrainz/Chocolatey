@@ -41,6 +41,6 @@
     <shortcut device="d004" enabled="true" action="delete" name="Google 2" type="url" path="commondesktop" force="true" />
   </shortcuts>
   <opapps comment="on prem application deployments">
-    <opapp device="d006" enabled="false" run="\\fs1.contoso.com\apps\packages\7-Zip\7z1701-x64.msi" params="" platforms="win10x64,win7x64" />
+    <opapp device="d006" enabled="false" name="7-zip 1701 x64" run="\\fs1.contoso.com\apps\packages\7-Zip\7z1701-x64.msi" params="" platforms="win10x64,win7x64" />
   </opapps>
 </configuration>
