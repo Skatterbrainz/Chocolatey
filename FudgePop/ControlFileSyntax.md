@@ -10,6 +10,8 @@ The control XML format includes a set of basic sections which focus on specific 
 * Services
 * Shortcuts
 
+The default location of the control is on this Github repo.  The file can be copied, renamed, and located anywhere which is accessible to the devices being configured to be managed by FudgePop.  For example, if the control.xml file is copied to a public-facing (e.g. DMZ) server share or web host, the Invoke-FudgePop function needs to include the -ControlFile parameter to specify the desired location.  For example: Invoke-FudgePop -ControlFile "https://contoso.xyz/fudgepop/custom.xml"
+
 ## Syntactical Parameterization Constructs
 
 (boy, that sounds impressive)
