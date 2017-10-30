@@ -26,34 +26,48 @@ Always remember that FudgePop is designed to run as a scheduled task, which exec
 
 **Control**
 
-* Description: provides global settings for all devices and all operations included with FudgePop
-* Required:
-  * enabled = "true" or "false" ("false" = kill switch / disables FudgePop)
-* Optional:
-  * exclude = "name" (name of computers to disable FudgePop operations)
+ * Description: provides global settings for all devices and all operations included with FudgePop
+ * Required:
+   * enabled = "true" or "false" ("false" = kill switch / disables FudgePop)
+ * Optional:
+   * exclude = "name" (name of computers to disable FudgePop operations)
 
 **Installs**
 
-* Description: Install and Update Chocolatey Packages
-* Element: /configuration/deployments/deployment
-* Required:
-  * device = "name" or "all"
-  * enabled = "true" or "false"
-  * when = "now" or "MM/DD/YYYY HH:MM AM/PM" (example: "10/27/2017 10:30 PM")
-  * innerText = names of Chocolatey packages, comma-separated (example: "7zip,vlc,office365proplus")
-* Optional: 
-  * user = "name" or "all"
+ * Description: Install and Update Chocolatey Packages
+ * Element: /configuration/deployments/deployment
+ * Required:
+   * device = "name" or "all"
+   * enabled = "true" or "false"
+   * when = "now" or "MM/DD/YYYY HH:MM AM/PM" (example: "10/27/2017 10:30 PM")
+   * innerText = names of Chocolatey packages, comma-separated (example: "7zip,vlc,office365proplus")
+ * Optional: 
+   * user = "name" or "all"
 
 **Removals**
 
-* Description: Remove Chocolatey Packages
-* Element: /configuration/removals/removal
-* Required:
-  * device = "name" or "all"
-  * enabled = "true" or "false"
-  * when = "now" or "MM/DD/YYYY HH:MM AM/PM" (example: "10/27/2017 10:30 PM")
-* Optional: 
-  * user = "name" or "all"
+  * Description: Remove Chocolatey Packages
+  * Element: /configuration/removals/removal
+  * Required:
+    * device = "name" or "all"
+    * enabled = "true" or "false"
+    * when = "now" or "MM/DD/YYYY HH:MM AM/PM" (example: "10/27/2017 10:30 PM")
+  * Optional: 
+    * user = "name" or "all"
+
+**Registry**
+
+  * Description: Configure and Manage Registry keys and values
+  * Element: /configuration/registry/reg
+  * Required:
+    * device = "name" or "all"
+    * enabled = "true" or "false"
+    * action = "create" or "delete"
+    * path = "_full-reg-path_" (example: "HKLM:\SOFTWARE\FudgePop")
+  * Optional (required for action="create"):
+    * value = "_name_" (name of registry value)
+    * data = "_data_" (data to assign to value)
+    * type = "_datatype_" ("string","dword", etc.")
 
 **Shortcut**
 
@@ -78,48 +92,48 @@ Always remember that FudgePop is designed to run as a scheduled task, which exec
   
 **Files**
 
-* Description: Configure and Manage Files
-* Element: /configuration/files/file
-* Required:
-  * device = "name" or "all"
-  * enabled = "true" or "false"
-  * action = "download","copy","move","rename","delete"
-  * source = "_path_"
-  * target = "_path_"
-* Optional: 
-  * (none)
+ * Description: Configure and Manage Files
+ * Element: /configuration/files/file
+ * Required:
+   * device = "name" or "all"
+   * enabled = "true" or "false"
+   * action = "download","copy","move","rename","delete"
+   * source = "_path_"
+   * target = "_path_"
+ * Optional: 
+   * (none)
 
 **Folders**
 
-* Description: Configure and Manage Folders
-* Element: /configuration/folders/folder
-* Required:
-  * device = "name" or "all"
-  * enabled = "true" or "false"
-  * action = "create","empty","rename","delete"
-* Optional: 
-  * (none)
+ * Description: Configure and Manage Folders
+ * Element: /configuration/folders/folder
+ * Required:
+   * device = "name" or "all"
+   * enabled = "true" or "false"
+   * action = "create","empty","rename","delete"
+ * Optional: 
+   * (none)
   
 **Services**
 
-* Description: Configure and Manage Windows Services
-* Element: /configuration/services/service
-* Required:
-  * device = "name" or "all"
-  * enabled = "true" or "false"
-  * action = "modify", "start", "stop" or "restart"
-  * name = "_name_"
-* Optional:
-  * config = "_parameters_" (example: "startup=automatic", "startup=disabled")
+ * Description: Configure and Manage Windows Services
+ * Element: /configuration/services/service
+ * Required:
+   * device = "name" or "all"
+   * enabled = "true" or "false"
+   * action = "modify", "start", "stop" or "restart"
+   * name = "_name_"
+ * Optional:
+   * config = "_parameters_" (example: "startup=automatic", "startup=disabled")
   
 **OPApps**
 
-* Description: Install or Remove apps using on-premises content sourcing
-* Element: /configuration/opapps/opapp
-* Required:
-  * device = "name" or "all"
-  * enabled = "true" or "false"
-  * run = "_path-and-filename_" (example: "\\fs1\apps\packages\app\setup.exe")
-  * platforms = "name,name,..." (example: "win10x64,win7x64,win7x86")
-* Optional:
-  * params = "_parameters_" (example: "/S")
+ * Description: Install or Remove apps using on-premises content sourcing
+ * Element: /configuration/opapps/opapp
+ * Required:
+   * device = "name" or "all"
+   * enabled = "true" or "false"
+   * run = "_path-and-filename_" (example: "\\fs1\apps\packages\app\setup.exe")
+   * platforms = "name,name,..." (example: "win10x64,win7x64,win7x86")
+ * Optional:
+   * params = "_parameters_" (example: "/S")
