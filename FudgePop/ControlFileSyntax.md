@@ -22,6 +22,7 @@ The control XML format includes a set of basic sections which focus on specific 
 
 **Installs**
 
+* Description: Install and Update Chocolatey Packages
 * Element: /configuration/deployments/deployment
 * Required:
   * device = "name" or "all"
@@ -33,6 +34,7 @@ The control XML format includes a set of basic sections which focus on specific 
 
 **Removals**
 
+* Description: Remove Chocolatey Packages
 * Element: /configuration/removals/removal
 * Required:
   * device = "name" or "all"
@@ -43,6 +45,7 @@ The control XML format includes a set of basic sections which focus on specific 
 
 **Shortcut**
 
+* Description: Configure and Manage Shortcuts
 * Element: /configuration/shortcuts/shortcut
 * Required:
   * device = "name" or "all"
@@ -60,6 +63,7 @@ The control XML format includes a set of basic sections which focus on specific 
   
 **Files**
 
+* Description: Configure and Manage Files
 * Element: /configuration/files/file
 * Required:
   * device = "name" or "all"
@@ -72,6 +76,7 @@ The control XML format includes a set of basic sections which focus on specific 
 
 **Folders**
 
+* Description: Configure and Manage Folders
 * Element: /configuration/folders/folder
 * Required:
   * device = "name" or "all"
@@ -82,6 +87,7 @@ The control XML format includes a set of basic sections which focus on specific 
   
 **Services**
 
+* Description: Configure and Manage Windows Services
 * Element: /configuration/services/service
 * Required:
   * device = "name" or "all"
@@ -91,4 +97,14 @@ The control XML format includes a set of basic sections which focus on specific 
 * Optional:
   * config = "_parameters_" (example: "startup=automatic", "startup=disabled")
   
-* Optional: 
+**OPApps**
+
+* Description: Install or Remove apps using on-premises content sourcing
+* Element: /configuration/opapps/opapp
+* Required:
+  * device = "name" or "all"
+  * enabled = "true" or "false"
+  * run = "_path-and-filename_" (example: "\\fs1\apps\packages\app\setup.exe")
+  * platforms = "name,name,..." (example: "win10x64,win7x64,win7x86")
+* Optional:
+  * params = "_parameters_" (example: "/S")
