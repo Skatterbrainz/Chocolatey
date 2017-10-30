@@ -68,6 +68,9 @@ The default location of the control is on this Github repo.  The file can be cop
   * windowstyle = "normal", "max" or "min"
   * args = "_string_"
   * workingpath = "_string-path_"
+* Notes:
+  * The path value can be an explicit path, an environment reference (e.g. $env:PUBLIC) or a SpecialFolders enum
+  * for a list of SpecialFolder enums, refer to [MSDN](https://msdn.microsoft.com/en-us/library/system.environment.specialfolder.aspx)
   
 **Files**
 
