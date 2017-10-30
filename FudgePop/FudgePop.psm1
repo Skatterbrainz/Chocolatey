@@ -1,1 +1,1 @@
-$(get-childitem "$psscriptroot" -Recurse -Include "*.ps1").foreach{. $_.FullName}
+$(Get-ChildItem "$PSScriptRoot" -Recurse -Include "*.ps1").foreach{. $_.FullName}
