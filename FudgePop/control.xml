@@ -20,8 +20,9 @@
     <folder device="d004" enabled="false" action="empty" path="c:\windows\temp" filter="*.txt" />
   </folders>
   <files comment="files to create or manage">
-    <file device="d004" enabled="false" action="download" source="" target="" />
-    <file device="d005" enabled="false" action="rename" source="" target="" />
+    <file device="d004" enabled="true" action="rename" source="c:\users\dstein\documents\test1.txt" target="c:\users\dstein\documents\test100.txt" />
+    <file device="d004" enabled="true" action="move" source="c:\users\dstein\documents\test2.txt" target="c:\users\dstein\downloads\test2.txt" />
+    <file device="d004" enabled="true" action="delete" source="c:\users\dstein\documents\test3.txt" />
     <file device="d005" enabled="false" action="move" source="" target="" />
   </files>
   <registry comment="registry keys and values to create or manage">
