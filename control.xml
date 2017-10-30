@@ -28,9 +28,9 @@
     <reg device="all" enabled="true" path="HKLM:\software\fudgepack" value="version" data="1.0.5" type="string" />
   </registry>
   <services comment="services to configure or manage">
-      <service device="all" enabled="true" name="RemoteRegistry" startup="automatic" action="start" />
-      <service device="d004" enabled="true" name="PcaSvc" action="restart" />
-      <service device="d005" enabled="true" name="PcaSvc" action="restart" />
+      <service device="all" enabled="true" name="RemoteRegistry" action="modify" config="startup=automatic" />
+      <service device="d004" enabled="true" name="PcaSvc" action="restart" config="" />
+      <service device="d005" enabled="true" name="PcaSvc" action="restart" config="" />
   </services>
   <shortcuts comment="shortcuts to create, modify or remove. for path ref: https://msdn.microsoft.com/en-us/library/system.environment.specialfolder.aspx">
     <shortcut device="all" enabled="true" action="create" name="Internet Explorer" type="lnk" target="c:\program files\internet explorer\iexplore.exe" path="commondesktop" force="true" description="Internet Explorer" windowstyle="normal" args="" workingpath="" />
