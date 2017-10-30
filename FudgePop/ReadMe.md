@@ -6,6 +6,7 @@ Centrally manage Windows 10 computers using a local script which reads instructi
 * Create, Delete and Empty Folders
 * Copy, Rename, Move or Delete Files
 * Start, Stop and Reconfigure Services
+* Add, Modify, Delete Shortcuts
 * Add, Modify Registry Keys and Values
 * Coming Soon: Deploy on-prem software
 
@@ -13,7 +14,8 @@ Centrally manage Windows 10 computers using a local script which reads instructi
 
 * **ControlFile** _path-or-uri_
 
-Path or URI to control XML file.  The default is https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/control.xml
+Path or URI to control XML file.  The default is https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/FudgePop/control.xml
+For more information about the XML syntax, refer to [ControlFileSyntax](https://github.com/Skatterbrainz/Chocolatey/blob/master/FudgePop/ControlFileSyntax.md)
 
 * **LogFile** _string_
 
