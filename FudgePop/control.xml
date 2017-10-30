@@ -48,4 +48,7 @@
     <detectionrule name="rule001" app="Paint.Net 4.0.19 x64" path="HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{F10AAD91-58DF-44EC-A647-810197141667}" value="" />
     <detectionrule name="rule002" app="RDC Manager 2.7" path="HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\{0240359E-6A4C-4884-9E94-B397A02D893C}" value="" />
   </detectionrules>
+  <permissions comment="configure security permissions on local resources">
+    <permission device="d004" enabled="true" path="c:\program files\mozilla firefox" principals="users" rights="modify" />
+  </permissions>
 </configuration>
