@@ -459,13 +459,12 @@ function Set-FPConfiguration {
 	Write-Host "Configuring FudgePop scheduled task"
 	$taskname = "Run FudgePop"
 	Write-FudgePopLog -Category "Info" -Message "updating FudgePop client configuration"
-	#$filePath = "$($env:PROGRAMFILES)\WindowsPowerShell\Modules\FudgePop\Invoke-FudgePop.ps1"
-	$filepath = "C:\Users\Dave\Downloads\FudgePop\Public\Invoke-FudgePop.ps1"
+	#$filepath = "$PSSCriptRoot\Public\Invoke-FudgePop.ps1"
+	$filepath = "$(Split-Path((Get-Module FudgePop).Path))\Public\Invoke-FudgePop.ps1"
 	if (Test-Path $filepath) {
-		$action = 'powershell.exe -ExecutionPolicy ByPass -NoProfile'
-		$action += ' -File '+$filepath
+		$action = 'powershell.exe -ExecutionPolicy ByPass -NoProfile -File '+$filepath
 		Write-Verbose "creating: SCHTASKS /Create /RU `"SYSTEM`" /SC hourly /MO $IntervalHours /TN `"$taskname`" /TR `"$action`""
-		SCHTASKS /Create /RU "SYSTEM" /SC hourly /MO $IntervalHours /TN "$taskname" /TR "$action"
+		SCHTASKS /Create /RU "SYSTEM" /SC hourly /MO $IntervalHours /TN "$taskname" /TR "$action" /RL HIGHEST
 		if (Get-ScheduledTask -TaskName $taskname -ErrorAction SilentlyContinue) {
 			Write-FudgePopLog -Category "Info" -Message "task has been created successfully."
 			Write-Output $True
@@ -473,5 +472,8 @@ function Set-FPConfiguration {
 		else {
 			Write-FudgePopLog -Category "Error" -Message "well, that sucked. no new scheduled task for you."
 		}
+	}
+	else {
+		Write-FudgePopLog -Category "Error" -Message "unable to locate file: $filepath"
 	}
 }
