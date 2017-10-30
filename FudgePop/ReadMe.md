@@ -20,8 +20,8 @@ Optional sub-group of XML control settings to apply.  The options are 'All','Ins
 
 * **Configure**
 
-Switch. Invokes the scheduled task setup using default values.  To specify custom values, use the Configure-FudgePop function.
+Switch. Invokes the scheduled task setup using default values.  To specify custom values, use the **Set-FudgePopConfiguration** function.
 
-## Configure-FudgePop
+## Set-FudgePopConfiguration
 
 Prompts for input to control FudgePop client settings.
