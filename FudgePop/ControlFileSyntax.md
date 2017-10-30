@@ -14,17 +14,32 @@ The control XML format includes a set of basic sections which focus on specific 
 
 (boy, that sounds impressive)
 
+**Ccontrol**
+
+* provides global settings for all devices and all operations included with FudgePop
+* Required:
+  * enabled="true" or "false" ("false" disables FudgePop)
+
 **Installs**
 
 * Element: /configuration/deployments/deployment
 * Required:
+  * device = "name" or "all"
+  * enabled = "true" or "false"
+  * when = "now" or "MM/DD/YYYY HH:MM AM/PM" (example: "10/27/2017 10:30 PM")
+  * innerText = names of Chocolatey packages, comma-separated (example: "7zip,vlc,office365proplus")
 * Optional: 
+  * user = "name" or "all"
 
 **Removals**
 
 * Element: /configuration/removals/removal
 * Required:
+  * device = "name" or "all"
+  * enabled = "true" or "false"
+  * when = "now" or "MM/DD/YYYY HH:MM AM/PM" (example: "10/27/2017 10:30 PM")
 * Optional: 
+  * user = "name" or "all"
 
 **Shortcut**
 
@@ -47,16 +62,33 @@ The control XML format includes a set of basic sections which focus on specific 
 
 * Element: /configuration/files/file
 * Required:
+  * device = "name" or "all"
+  * enabled = "true" or "false"
+  * action = "download","copy","move","rename","delete"
+  * source = "_path_"
+  * target = "_path_"
 * Optional: 
+  * (none)
 
 **Folders**
 
 * Element: /configuration/folders/folder
 * Required:
+  * device = "name" or "all"
+  * enabled = "true" or "false"
+  * action = "create","empty","rename","delete"
 * Optional: 
-
+  * (none)
+  
 **Services**
 
 * Element: /configuration/services/service
 * Required:
+  * device = "name" or "all"
+  * enabled = "true" or "false"
+  * action = "modify", "start", "stop" or "restart"
+  * name = "_name_"
+* Optional:
+  * config = "_parameters_" (example: "startup=automatic", "startup=disabled")
+  
 * Optional: 
