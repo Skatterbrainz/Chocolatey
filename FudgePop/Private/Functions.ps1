@@ -238,17 +238,27 @@ function Invoke-FPRegistry {
 			Write-FudgePopLog -Category "Info" -Message "type: $regtype"
 			if (-not(Test-Path $regpath)) {
 				Write-FudgePopLog -Category "Info" -Message "key not found, creating registry key"
-				New-Item -Path $regpath -Force | Out-Null
-				Write-FudgePopLog -Category "Info" -Message "updating value assignment to $regdata"
-				New-ItemProperty -Path $regpath -Name $regval -Value $regdata -PropertyType $regtype -Force | Out-Null
+				if (-not $TestMode) {
+					New-Item -Path $regpath -Force | Out-Null
+					Write-FudgePopLog -Category "Info" -Message "updating value assignment to $regdata"
+					New-ItemProperty -Path $regpath -Name $regval -Value $regdata -PropertyType $regtype -Force | Out-Null
+				}
+				else {
+					Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+				}
 			}
 			else {
 				Write-FudgePopLog -Category "Info" -Message "key already exists"
-				$cv = Get-ItemProperty -Path $regpath -Name $regval | Select-Object -ExpandProperty $regval
-				Write-FudgePopLog -Category "Info" -Message "current value of $regval is $cv"
-				if ($cv -ne $regdata) {
-					Write-FudgePopLog -Category "Info" -Message "updating value assignment to $regdata"
-					New-ItemProperty -Path $regpath -Name $regval -Value $regdata -PropertyType $regtype -Force | Out-Null
+				if (-not $TestMode) {
+					$cv = Get-ItemProperty -Path $regpath -Name $regval | Select-Object -ExpandProperty $regval
+					Write-FudgePopLog -Category "Info" -Message "current value of $regval is $cv"
+					if ($cv -ne $regdata) {
+						Write-FudgePopLog -Category "Info" -Message "updating value assignment to $regdata"
+						New-ItemProperty -Path $regpath -Name $regval -Value $regdata -PropertyType $regtype -Force | Out-Null
+					}
+				}
+				else {
+					Write-FudgePopLog -Category "Info" -Message "TEST MODE"
 				}
 			}
 		} # foreach
@@ -287,13 +297,23 @@ function Invoke-FPServices {
 			if ($svcStart -ne "" -and $scfg.StartType -ne $svcStart) {
 				Write-FudgePopLog -Category "Info" -Message "current startup type is: $sst"
 				Write-FudgePopLog -Category "Info" -Message "setting service startup to: $svcStart"
-				Set-Service -Name $svcName -StartupType $svcStart | Out-Null
+				if (-not $TestMode) {
+					Set-Service -Name $svcName -StartupType $svcStart | Out-Null
+				}
+				else {
+					Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+				}
 			}
 			switch ($svcAction) {
 				'start' {
 					if ($scfg.Status -ne 'Running') {
 						Write-FudgePopLog -Category "Info" -Message "starting service..."
-						Start-Service -Name $svcName | Out-Null
+						if (-not $TestMode) {
+							Start-Service -Name $svcName | Out-Null
+						}
+						else {
+							Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+						}
 					}
 					else {
 						Write-FudgePopLog -Category "Info" -Message "service is already running"
@@ -302,12 +322,22 @@ function Invoke-FPServices {
 				}
 				'restart' {
 					Write-FudgePopLog -Category "Info" -Message "restarting service..."
-					Restart-Service -Name $svcName -ErrorAction SilentlyContinue
+					if (-not $TestMode) {
+						Restart-Service -Name $svcName -ErrorAction SilentlyContinue
+					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+					}
 					break
 				}
 				'stop' {
 					Write-FudgePopLog -Category "Info" -Message "stopping service..."
-					Stop-Service -Name $svcName -Force -NoWait -ErrorAction SilentlyContinue
+					if (-not $TestMode) {
+						Stop-Service -Name $svcName -Force -NoWait -ErrorAction SilentlyContinue
+					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+					}
 					break
 				}
 			} # switch
@@ -343,7 +373,12 @@ function Invoke-FPFolders {
 				Write-FudgePopLog -Category "Info" -Message "folder path: $folderPath"
 				if (-not(Test-Path $folderPath)) {
 					Write-FudgePopLog -Category "Info" -Message "creating new folder"
-					mkdir -Path $folderPath -Force | Out-Null
+					if (-not $TestMode) {
+						mkdir -Path $folderPath -Force | Out-Null
+					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+					}
 				}
 				else {
 					Write-FudgePopLog -Category "Info" -Message "folder already exists"
@@ -354,9 +389,14 @@ function Invoke-FPFolders {
 				$filter = $folder.filter
 				if ($filter -eq "") { $filter = "*.*" }
 				Write-FudgePopLog -Category "Info" -Message "deleting $filter from $folderPath and subfolders"
-				Get-ChildItem -Path "$folderPath" -Filter "$filter" -Recurse |
-					foreach { Remove-Item -Path $_.FullName -Confirm:$False -Recurse -ErrorAction SilentlyContinue }
-				Write-FudgePopLog -Category "Info" -Message "some files may remain if they were in use"
+				if (-not $TestMode) {
+					Get-ChildItem -Path "$folderPath" -Filter "$filter" -Recurse |
+						foreach { Remove-Item -Path $_.FullName -Confirm:$False -Recurse -ErrorAction SilentlyContinue }
+					Write-FudgePopLog -Category "Info" -Message "some files may remain if they were in use"
+				}
+				else {
+					Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+				}
 				break
 			}
 		} # switch
@@ -371,7 +411,7 @@ function Invoke-FPFolders {
 #>
 
 function Invoke-FPFiles {
-	[CmdletBinding()]
+	[CmdletBinding(SupportsShouldProcess=$True)]
 	param (
 		[parameter(Mandatory=$True)]
 		$DataSet
@@ -384,21 +424,203 @@ function Invoke-FPFiles {
 		Write-FudgePopLog -Category "Info" -Message "file action assigned: $action"
 		Write-FudgePopLog -Category "Info" -Message "source: $fileSource"
 		Write-FudgePopLog -Category "Info" -Message "target: $fileTarget"
-		switch ($action) {
-			'download' {
-				Write-FudgePopLog -Category "Info" -Message "downloading file"
-				break
-			}
-			'rename' {
-				Write-FudgePopLog -Category "Info" -Message "renaming file"
-				break
-			}
-			'move' {
-				Write-FudgePopLog -Category "Info" -Message "moving file"
-				break
-			}
-		} # switch
+		if ($TestMode) {
+			Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+		}
+		else {
+			switch ($action) {
+				'download' {
+					Write-FudgePopLog -Category "Info" -Message "downloading file"
+					if ($fileSource.StartsWith('http') -or $fileSource.StartsWith('ftp')) {
+						try {
+							$WebClient = New-Object System.Net.WebClient
+							$WebClient.DownloadFile($fileSource, $fileTarget) | Out-Null
+							if (Test-Path $fileTarget) {
+								Write-FudgePopLog -Category "Info" -Message "file downloaded successfully"
+							}
+							else {
+								Write-FudgePopLog -Category "Error" -Message "failed to download file!"
+							}
+						}
+						catch {
+							Write-FudgePopLog -Category "Error" -Message $_.Exception.Message
+						}
+					}
+					else {
+						try {
+							Copy-Item -Source $fileSource -Destination $fileTarget -Force | Out-Null
+							if (Test-Path $fileTarget) {
+								Write-FudgePopLog -Category "Info" -Message "file downloaded successfully"
+							}
+							else {
+								Write-FudgePopLog -Category "Error" -Message "failed to download file!"
+							}
+						}
+						catch {
+							Write-FudgePopLog -Category "Error" -Message "failed to download file!"
+						}
+					}
+					break
+				}
+				'rename' {
+					Write-FudgePopLog -Category "Info" -Message "renaming file"
+					Rename-Item -Path $fileSource -NewName $fileTarget -Force | Out-Null
+					if (Test-Path $fileTarget) {
+						Write-FudgePopLog -Category "Info" -Message "file renamed successfully"
+					}
+					else {
+						Write-FudgePopLog -Category "Error" -Message "failed to rename file!"
+					}
+					break
+				}
+				'move' {
+					Write-FudgePopLog -Category "Info" -Message "moving file"
+					Move-Item -Path $fileSource -Destination $fileTarget -Force | Out-Null
+					if (Test-Path $fileTarget) {
+						Write-FudgePopLog -Category "Info" -Message "file moved successfully"
+					}
+					else {
+						Write-FudgePopLog -Category "Error" -Message "failed to move file!"
+					}
+					break
+				}
+				'delete' {
+					Write-FudgePopLog -Category "Info" -Message "deleting file"
+					if (Test-Path $fileSource) {
+						try {
+							Remove-Item -Path $fileSource -Force | Out-Null
+							if (-not(Test-Path $fileSource)) {
+								Write-FudgePopLog -Category "Info" -Message "file deleted successfully"
+							}
+							else {
+								Write-FudgePopLog -Category "Error" -Message "failed to delete file!"
+							}
+						}
+						catch {
+							Write-FudgePopLog -Category "Error" -Message $_.Exception.Message
+						}
+					}
+					break
+				}
+			} # switch
+		}
 	} # foreach
+}
+
+<#
+.SYNOPSIS
+	
+.PARAMETER DataSet
+	XML data set fed from the XML control file
+#>
+
+function Invoke-FPShortcuts {
+	param (
+		[parameter(Mandatory=$True)]
+		$DataSet
+	)
+	Write-FudgePopLog -Category "Info" -Message "--------- shortcut assignments ---------"
+	foreach ($sc in $DataSet) {
+		$scDevice   = $sc.device
+		$scName     = $sc.name
+		$scAction   = $sc.action
+		$scTarget   = $sc.target
+		$scPath     = $sc.path
+		$scType     = $sc.type
+		$scForce    = $sc.force
+		$scDesc     = $sc.description
+		$scArgs     = $sc.args
+		$scWindow   = $sc.windowstyle
+		$scWorkPath = $sc.workingpath
+		try {
+			if (-not (Test-Path $scPath)) {
+				$scRealPath = [environment]::GetFolderPath($scPath)
+			}
+			else {
+				$scRealPath = $scPath
+			}
+		}
+		catch {
+			$scRealPath = $null
+		}
+		if ($scRealPath) {
+			Write-FudgePopLog -Category "Info" -Message "shortcut action: $scAction"
+			switch ($scAction) {
+				'create' {
+					if ($scWindow.length -gt 0) {
+						switch ($scWindow) {
+							'normal' {$scWin = 1; break;}
+							'max' {$scWin = 3; break;}
+							'min' {$scWin = 7; break;}
+						}
+					}
+					else {
+						$scWin = 1
+					}
+					Write-FudgePopLog -Category "Info" -Message "shortcut name....: $scName"
+					Write-FudgePopLog -Category "Info" -Message "shortcut path....: $scPath"
+					Write-FudgePopLog -Category "Info" -Message "shortcut target..: $scTarget"
+					Write-FudgePopLog -Category "Info" -Message "shortcut descrip.: $scDesc"
+					Write-FudgePopLog -Category "Info" -Message "shortcut args....: $scArgs"
+					Write-FudgePopLog -Category "Info" -Message "shortcut workpath: $scWorkPath"
+					Write-FudgePopLog -Category "Info" -Message "shortcut window..: $scWindow"
+					Write-FudgePopLog -Category "Info" -Message "device name......: $scDevice"
+					$scFullName = "$scRealPath\$scName.$scType"
+					Write-FudgePopLog -Category "Info" -Message "full linkpath: $scFullName"
+					if ($scForce -eq 'true' -or (-not(Test-Path $scFullName))) {
+						Write-FudgePopLog -Category "Info" -Message "creating new shortcut"
+						try {
+							if (-not $TestMode) {
+								$wShell = New-Object -ComObject WScript.Shell
+								$shortcut = $wShell.CreateShortcut("$scFullName")
+								$shortcut.TargetPath = $scTarget
+								if ($scType -eq 'lnk') {
+									if ($scArgs -ne "") { $shortcut.Arguments = "$scArgs" }
+									#$shortcut.HotKey       = ""
+									if ($scWorkPath -ne "") { $shortcut.WorkingDirectory = "$scWorkPath" }
+									$shortcut.WindowStyle  = $scWin
+									$shortcut.Description  = $scName
+								}
+								#$shortcut.IconLocation = $scFullName
+								$shortcut.Save()
+							}
+							else {
+								Write-FudgePopLog -Category "Info" -Message "TEST MODE: $scFullName"
+							}
+						}
+						catch {
+							Write-FudgePopLog -Category "Error" -Message "failed to create shortcut: $($_.Exception.Message)"
+						}
+					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "shortcut already created - no updates"
+					}
+					break
+				}
+				'delete' {
+					break
+				}
+			} # switch
+		}
+		else {
+			Write-FudgePopLog -Category "Error" -Message "failed to convert path key"
+		}
+	} # foreach
+}
+
+<#
+.SYNOPSIS
+	
+.PARAMETER DataSet
+	XML data set fed from the XML control file
+#>
+
+function Invoke-FPOPApps {
+	param (
+		[parameter(Mandatory=$True)]
+		$DataSet
+	)
+	Write-FudgePopLog -Category "Info" -Message "opapps - this function is not yet enabled"
 }
 
 <#
@@ -432,12 +654,18 @@ function Invoke-FPTasks {
 			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
 		$files    = $DataSet.configuration.files.file | 
 			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
+		$shortcuts = $DataSet.configuration.shortcuts.shortcut |
+			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
+		$opapps = $DataSet.configuration.opapps.opapp |
+			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
 		if ($folders)  { if ($Payload -eq 'All' -or $Payload -eq 'Folders')  { Invoke-FPFolders -DataSet $folders } }
 		if ($installs) { if ($Payload -eq 'All' -or $Payload -eq 'Installs') { Invoke-FPChocoInstalls -DataSet $installs } }
 		if ($removals) { if ($Payload -eq 'All' -or $Payload -eq 'Removals') { Invoke-FPChocoRemovals -DataSet $removals } }
 		if ($regkeys)  { if ($Payload -eq 'All' -or $Payload -eq 'Registry') { Invoke-FPRegistry -DataSet $regkeys } }
 		if ($services) { if ($Payload -eq 'All' -or $Payload -eq 'Services') { Invoke-FPServices -DataSet $services } }
 		if ($files)    { if ($Payload -eq 'All' -or $Payload -eq 'Files')    { Invoke-FPFiles -DataSet $files } }
+		if ($shortcuts){ if ($Payload -eq 'All' -or $Payload -eq 'Shortcuts'){ Invoke-FPShortcuts -DataSet $shortcuts } }
+		if ($opapps)   { if ($Payload -eq 'All' -or $Payload -eq 'OPApps')   { Invoke-FPOPApps -DataSet $opapps } }
 	}
 }
 
