@@ -6,7 +6,7 @@
 
 .PARAMETER ControlFile
 	[optional][string] Path or URI to appcontrol.xml file
-	default: https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/control.xml
+	default: https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/FudgePop/control.xml
 	
 .PARAMETER LogFile
 	[optional][string] Path to output log file
@@ -16,7 +16,7 @@
 	[optional][switch] WhatIf mode - no installs or removals executed
 
 .PARAMETER Payload
-	[optional] [string] One of 'All', 'Files', 'Folders', 'Registry', 'Installs', 'Removals' or 'Services'
+	[optional] [string] One of 'All', 'Files', 'Folders', 'Registry', 'Installs', 'Removals','Services','Shortcuts','OpApps'
 	default is 'All'
 	
 .NOTES
@@ -45,7 +45,7 @@ function Invoke-FudgePop {
 		[parameter(Mandatory=$False, HelpMessage="Run in testing mode")]
 			[switch] $TestMode,
 		[parameter(Mandatory=$False, HelpMessage="Specify configuration task group to invoke from XML control file")]
-			[ValidateSet('All','Installs','Removals','Folders','Files','Registry','Services','Shortcuts','OPApps')]
+			[ValidateSet('All','Installs','Removals','Folders','Files','Registry','Services','Shortcuts','OpApps')]
 			[string] $Payload = 'All',
 		[parameter(Mandatory=$False, HelpMessage="Configure options")]
 			[switch] $Configure
@@ -65,6 +65,9 @@ function Invoke-FudgePop {
 			if ($controldata.configuration.control.enabled -ne 'true') {
 				Write-FudgePopLog -Category "Info" -Message "control file is currently DISABLED"
 			}
+			elseif (($controldata.configuration.control.exclude -split ',') -contains $env:COMPUTERNAME) {
+				Write-FudgePopLog -Category "Info" -Message "control file is currently DISABLED for this computer"
+			}
 			else {
 				Invoke-FPTasks -DataSet $controlData 
 			}
@@ -74,6 +77,7 @@ function Invoke-FudgePop {
 		}
 	}
 	Write-FudgePopLog -Category "Info" -Message "---- processing cycle finished ----"
+	try { Stop-Transcript -ErrorAction SilentlyContinue } catch {}
 	if ($error.Count -eq 0) { Write-Output 0 } else { Write-Output -1 }
 }
 Export-ModuleMember -Function Invoke-FudgePop
