@@ -6,7 +6,7 @@
 
 .PARAMETER ControlFile
 	[optional][string] Path or URI to appcontrol.xml file
-	default: https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/fudgepack/appcontrol.xml
+	default: https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/appcontrol.xml
 	
 .PARAMETER LogFile
 	[optional][string] Path to output log file
@@ -35,7 +35,7 @@
 param (
 	[parameter(Mandatory=$False)]
 		[ValidateNotNullOrEmpty()]
-		[string] $ControlFile = 'https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/fudgepack/appcontrol.xml',
+		[string] $ControlFile = 'https://raw.githubusercontent.com/Skatterbrainz/Chocolatey/master/appcontrol.xml',
 	[parameter(Mandatory=$False)]
 		[ValidateNotNullOrEmpty()]
 		[string] $LogFile = "$($env:TEMP)\fudgepack.log",
