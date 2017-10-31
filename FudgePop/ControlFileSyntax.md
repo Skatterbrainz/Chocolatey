@@ -13,6 +13,7 @@ The control XML format includes a set of basic sections which focus on specific 
 * Services
 * Shortcuts
 * On-Prem Applications
+* Permissions
 
 The default location of the control is on this Github repo.  The file can be copied, renamed, and located anywhere which is accessible to the devices being configured to be managed by FudgePop.  For example, if the control.xml file is copied to a public-facing (e.g. DMZ) server share or web host, the Invoke-FudgePop function needs to include the -ControlFile parameter to specify the desired location.  For example: Invoke-FudgePop -ControlFile "https://contoso.xyz/fudgepop/custom.xml"
 
@@ -135,5 +136,31 @@ Always remember that FudgePop is designed to run as a scheduled task, which exec
    * enabled = "true" or "false"
    * run = "_path-and-filename_" (example: "\\fs1\apps\packages\app\setup.exe")
    * platforms = "name,name,..." (example: "win10x64,win7x64,win7x86")
+   * detect = "_detection-rulename_"
  * Optional:
-   * params = "_parameters_" (example: "/S")
+   * params = "_parameters_" (example: "/S", "/qb! /norestart", etc.)
+   * restart = "true" or "false"
+
+**DetectionRules**
+
+ * Description: Defines signatures for determining if OpApps are installed or not
+ * Element: /configuration/detectionrules/detectionrule
+ * Required:
+   * name = "_name_" (matches "detect" attribute for OpApp entry)
+   * app = "_caption_"
+   * path = "_path-to-folder-or-file-or-registry-key_"
+ * Optional:
+   * value = "_data_"
+
+**Permissions**
+
+ * Description: Manage ACL permissions on files and folders
+ * Element: /configuration/permissions/permission
+ * Required:
+   * device = "name" or "all"
+   * enabled = "true" or "false"
+   * path = "_path-to-folder-or-file_"
+   * principals = "_user-or-group_"
+   * rights = "read","write","modify","delete","readexecute","full"
+ * Optional: 
+   * (none)
