@@ -710,7 +710,166 @@ function Invoke-FPOPApps {
 		[parameter(Mandatory=$True)]
 		$DataSet
 	)
-	Write-FudgePopLog -Category "Info" -Message "opapps - this function is not yet enabled"
+	Write-FudgePopLog -Category "Info" -Message "--------- on-prem app assignments ---------"
+	foreach ($app in $DataSet) {
+		$appName   = $app.name
+		$action    = $app.action
+		$appPlat   = $app.platforms
+		$appRun    = $app.run
+		$appParams = $app.params
+		Write-FudgePopLog -Category "Info" -Message "appname: $appName"
+		Write-FudgePopLog -Category "Info" -Message "app run: $appRun"
+		Write-FudgePopLog -Category "Info" -Message "action: $action"
+		switch ($action) {
+			'install' {
+				if (-not $TestMode) {
+					if ($appRun.EndsWith('.msi')) {
+						$proc = "msiexec.exe"
+						$args = "/i `"$appRun`" /q"
+						if ($appParams -ne "") {
+							$args += " $appParams"
+						}
+					}
+					elseif ($appRun.EndsWith('.exe')) {
+						$proc = $appRun
+						$args = $appParams
+					}
+					else {
+						Write-FudgePopLog -Category "Error" -Message "invalid file type"
+						break
+					}
+					Write-FudgePopLog -Category "Info" -Message "run-process: $proc"
+					Write-FudgePopLog -Category "Info" -Message "run-params: $args"
+					Write-FudgePopLog -Category "Info" -Message "contacting source to verify availability..."
+					if (Test-Path $appRun) {
+						try {
+							$p = Start-Process -FilePath $proc -ArgumentList $args -NoNewWindow -Wait -PassThru
+							if ((0,3010) -contains $p.ExitCode) {
+								Write-FudgePopLog -Category "Info" -Message "installation successful!"
+							}
+							else {
+								Write-FudgePopLog -Category "Error" -Message "installation failed with $($p.ExitCode)"
+							}
+						}
+						catch {
+							Write-FudgePopLog -Category "Error" -Message $_.Exception.Message
+						}
+					}
+					else {
+						Write-FudgePopLog -Category "Info" -Message "installer file is not accessible (skipping)"
+					}
+				}
+				else {
+					Write-FudgePopLog -Category "Info" -Message "TEST MODE"
+				}
+				break
+			}
+			'uninstall' {
+				$detect = $app.detect
+				$rule = ($controldata.configuration.detectionrules.detectionrule | Where-Object {$_.name -eq $detect}).path
+				Write-FudgePopLog -Category "Info" -Message "detection rule name: $detect"
+				Write-FudgePopLog -Category "Info" -Message "detection rule: $rule"
+				if (Test-Path $rule) {
+					Write-FudgePopLog -Category "Info" -Message "ruletest = TRUE"
+					if ($appRun.StartsWith('msiexec /x')) {
+						$proc = "msiexec"
+						$args = ($appRun -replace ("msiexec","")).trim()
+						try {
+							$p = Start-Process -FilePath $proc -ArgumentList $args -NoNewWindow -Wait -PassThru
+							if ((0,3010,1605) -contains $p.ExitCode) {
+								Write-FudgePopLog -Category "Info" -Message "uninstall was successful!"
+							}
+							else {
+								Write-FudgePopLog -Category "Error" -Message "uninstall failed with $($p.ExitCode)"
+							}
+						}
+						catch {
+							Write-FudgePopLog -Category "Error" -Message $_.Exception.Message
+						}
+					}
+				}
+				else {
+					Write-FudgePopLog -Category "Info" -Message "ruletest = FALSE"
+				}
+				break
+			}
+		} # switch
+	} # foreach
+}
+
+function Invoke-FPPermissions {
+	param (
+		[parameter(Mandatory=$True)]
+		$DataSet
+	)
+	Write-FudgePopLog -Category "Info" -Message "--------- permissions assignments ---------"
+	foreach ($priv in $DataSet) {
+		$device     = $priv.device
+		$privPath   = $priv.path
+		$privPrinc  = $priv.principals
+		$privRights = $priv.rights
+		if ($privPath.StartsWith('HK')) {
+			$privType = 'registry'
+		}
+		else {
+			$privType = 'filesystem'
+		}
+		Write-FudgePopLog -Category "Info" -Message "device: $device"
+		Write-FudgePopLog -Category "Info" -Message "priv path: $privPath"
+		Write-FudgePopLog -Category "Info" -Message "priv principals: $privPrinc"
+		Write-FudgePopLog -Category "Info" -Message "priv rights: $privRights"
+		if (Test-Path $privPath) {
+			switch ($privType) {
+				'filesystem' {
+					switch ($privRights) {
+						'full' {
+							$pset = '(OI)(CI)(F)'
+							break
+						}
+						'modify' {
+							$pset = '(OI)(CI)(M)'
+							break
+						}
+						'read' {
+							$pset = '(OI)(CI)(R)'
+							break
+						}
+						'write' {
+							$pset = '(OI)(CI)(W)'
+							break 
+						}
+						'delete' {
+							$pset = '(OI)(CI)(D)'
+							break
+						}
+						'readexecute' {
+							$pset = '(OI)(CI)(RX)'
+							break
+						}
+					} # switch
+					Write-FudgePopLog -Category "Info" -Message "permission set: $pset"
+					if (-not $TestMode) {
+						try {
+							icacls "$privPath" /grant "$privPrinc`:$pset" /T /C /Q
+						}
+						catch {
+							Write-FudgePopLog -Category "Error" -Message $_.Exception.Message
+						}
+					}
+					else {
+						Write-FudgePopLog -Category "TESTMODE" -Message "icacls `"$privPath`" /grant `"$privPrinc`:$pset`" /T /C /Q"
+					}
+					break
+				}
+				'registry' {
+					break
+				}
+			} # switch
+		}
+		else {
+			Write-FudgePopLog -Category "Error" -Message ""
+		}
+	} # switch
 }
 
 <#
@@ -732,6 +891,8 @@ function Invoke-FPTasks {
 		}
 	}
 	else {
+		$files    = $DataSet.configuration.files.file | 
+			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
 		$installs = $DataSet.configuration.deployments.deployment | 
 			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
 		$removals = $DataSet.configuration.removals.removal | 
@@ -742,11 +903,11 @@ function Invoke-FPTasks {
 			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
 		$folders  = $DataSet.configuration.folders.folder | 
 			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
-		$files    = $DataSet.configuration.files.file | 
-			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
 		$shortcuts = $DataSet.configuration.shortcuts.shortcut |
 			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
 		$opapps = $DataSet.configuration.opapps.opapp |
+			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
+		$privs  = $DataSet.configuration.permissions.permission |
 			Where-Object {$_.enabled -eq "true" -and ($_.device -eq $mypc -or $_.device -eq 'all')}
 		if ($folders)  { if ($Payload -eq 'All' -or $Payload -eq 'Folders')  { Invoke-FPFolders -DataSet $folders } }
 		if ($installs) { if ($Payload -eq 'All' -or $Payload -eq 'Installs') { Invoke-FPChocoInstalls -DataSet $installs } }
@@ -756,6 +917,7 @@ function Invoke-FPTasks {
 		if ($files)    { if ($Payload -eq 'All' -or $Payload -eq 'Files')    { Invoke-FPFiles -DataSet $files } }
 		if ($shortcuts){ if ($Payload -eq 'All' -or $Payload -eq 'Shortcuts'){ Invoke-FPShortcuts -DataSet $shortcuts } }
 		if ($opapps)   { if ($Payload -eq 'All' -or $Payload -eq 'OPApps')   { Invoke-FPOPApps -DataSet $opapps } }
+		if ($privs)    { if ($Payload -eq 'All' -or $Payload -eq 'Permissions') { Invoke-FPPermissions -DataSet $privs } }
 	}
 }
 
