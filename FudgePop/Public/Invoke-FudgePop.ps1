@@ -16,7 +16,7 @@
 	[optional][switch] WhatIf mode - no installs or removals executed
 
 .PARAMETER Payload
-	[optional] [string] One of 'All', 'Files', 'Folders', 'Registry', 'Installs', 'Removals','Services','Shortcuts','OpApps'
+	[optional] [string] One of 'All', 'Files', 'Folders', 'Registry', 'Installs', 'Removals','Services','Shortcuts','OpApps','Permissions'
 	default is 'All'
 	
 .NOTES
@@ -45,7 +45,7 @@ function Invoke-FudgePop {
 		[parameter(Mandatory=$False, HelpMessage="Run in testing mode")]
 			[switch] $TestMode,
 		[parameter(Mandatory=$False, HelpMessage="Specify configuration task group to invoke from XML control file")]
-			[ValidateSet('All','Installs','Removals','Folders','Files','Registry','Services','Shortcuts','OpApps')]
+			[ValidateSet('All','Installs','Removals','Folders','Files','Registry','Services','Shortcuts','OpApps','Permissions')]
 			[string] $Payload = 'All',
 		[parameter(Mandatory=$False, HelpMessage="Configure options")]
 			[switch] $Configure
