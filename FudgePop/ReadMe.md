@@ -8,7 +8,9 @@ Centrally manage Windows 10 computers using a local script which reads instructi
 * Start, Stop and Reconfigure Services
 * Add, Modify, Delete Shortcuts
 * Add, Modify Registry Keys and Values
-* Coming Soon: Deploy on-prem software
+* Deploy on-prem software
+* Uninstall Local Apps (exe, msi)
+* Modify Folder and File Permissions
 
 # Installation
 
@@ -40,7 +42,9 @@ under the local SYSTEM account, the temp will be related to that account.
 
 * **Payload** _string_
 
-Optional sub-group of XML control settings to apply.  The options are 'All','Installs','Removals','Folders','Files','Registry', and 'Services'.  The default is 'All'
+Optional sub-group of XML control settings to apply.  The options are 'All','Installs','Removals',
+  'Folders','Files','Registry','Services',Shortcuts','OpApps','Permissions'.
+  The default is 'All'
 
 * **Configure**
 
